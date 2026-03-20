@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNS Autopilot Pro</title>
+<meta name="description" content="副業・ビジネス特化のSNS投稿自動生成。アカウントフェーズに合わせた週間プランとDM集客CTAを自動生成。">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050609;--s1:#090c12;--s2:#0d1119;--s3:#131824;--s4:#1a2130;
+  --b0:rgba(255,255,255,.05);--b1:rgba(255,255,255,.09);--b2:rgba(255,255,255,.15);
+  --tx:#bbc9de;--t1:#4a607c;--t2:#28384c;
+  --lime:#c8ff5c;--lime2:#96e000;
+  --or:#ff8c3c;--pu:#9d7fff;--te:#3dffb0;--re:#ff4d6d;
+  --xc:#dde8f8;--ic:#e870ff;--tc:#38b8ff;
+  --fh:'Syne',sans-serif;--fb:'Noto Sans JP',sans-serif;--fm:'JetBrains Mono',monospace;
+  --rr:9px;--rr2:14px;--rr3:20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--tx);min-height:100vh;font-size:13px;line-height:1.6;overflow-x:hidden}
+
+/* ──────── HEADER ──────── */
+.hdr{height:50px;background:var(--s1);border-bottom:1px solid var(--b0);display:flex;align-items:center;padding:0 22px;position:sticky;top:0;z-index:100;gap:0}
+.logo{display:flex;align-items:center;gap:9px;margin-right:18px;flex-shrink:0}
+.lmark{width:26px;height:26px;border-radius:7px;background:var(--lime);display:grid;place-items:center;font-size:12px;color:#000}
+.lname{font-family:var(--fh);font-size:15px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.lbadge{font-family:var(--fm);font-size:8px;padding:2px 6px;border-radius:3px;background:rgba(200,255,92,.1);color:var(--lime);margin-left:5px}
+.tabs{display:flex;height:50px;flex:1;min-width:0}
+.tb{display:flex;align-items:center;gap:5px;padding:0 14px;font-family:var(--fh);font-size:12px;font-weight:700;color:var(--t1);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tb:hover{color:var(--tx)}.tb.on{color:var(--lime);border-bottom-color:var(--lime)}
+.tb .nbadge{font-family:var(--fm);font-size:9px;background:var(--s3);color:var(--t2);padding:1px 5px;border-radius:3px;margin-left:3px}
+.tb.on .nbadge{background:rgba(200,255,92,.1);color:var(--lime)}
+.hdr-r{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.phase-chip{font-family:var(--fm);font-size:10px;padding:4px 10px;border-radius:12px;border:1px solid var(--b1);color:var(--t1);display:flex;align-items:center;gap:6px;cursor:pointer}
+.phase-chip:hover{border-color:var(--lime);color:var(--lime)}
+.pdot{width:6px;height:6px;border-radius:50%;background:var(--t2)}
+
+/* ──────── LAYOUT ──────── */
+.main{max-width:1040px;margin:0 auto;padding:20px 18px}
+.pg{display:none}.pg.on{display:block}
+
+/* ──────── CARD ──────── */
+.card{background:var(--s2);border:1px solid var(--b0);border-radius:var(--rr2);padding:16px 18px;margin-bottom:12px}
+.chtitle{font-family:var(--fm);font-size:9px;color:var(--t1);text-transform:uppercase;letter-spacing:1.8px;margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.chtitle::before{content:'';width:3px;height:3px;border-radius:50%;background:var(--lime);flex-shrink:0}
+
+/* ──────── FORM ──────── */
+input[type=text],input[type=number],input[type=url],textarea,select{width:100%;background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr);color:var(--tx);font-family:var(--fb);font-size:13px;padding:8px 12px;transition:all .15s;outline:none;appearance:none}
+input:focus,textarea:focus,select:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(200,255,92,.06)}
+textarea{resize:vertical;line-height:1.75}
+select option{background:var(--s2)}
+.lbl{font-family:var(--fm);font-size:9px;color:var(--t2);margin-bottom:3px;text-transform:uppercase;letter-spacing:.9px}
+.ig{display:flex;flex-direction:column;gap:3px;flex:1}
+.ir{display:flex;gap:9px;margin-bottom:9px;align-items:flex-end}
+
+/* ──────── BUTTONS ──────── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 15px;border-radius:var(--rr);font-family:var(--fh);font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
+.btn-y{background:var(--lime);color:#000}.btn-y:hover{filter:brightness(1.07);transform:translateY(-1px);box-shadow:0 4px 14px rgba(200,255,92,.2)}
+.btn-g{background:transparent;border:1px solid var(--b1);color:var(--t1)}.btn-g:hover{border-color:var(--lime);color:var(--lime)}
+.btn-te{background:rgba(61,255,176,.1);border:1px solid rgba(61,255,176,.22);color:var(--te)}.btn-te:hover{background:rgba(61,255,176,.16)}
+.btn-re{background:transparent;border:1px solid rgba(255,77,109,.2);color:var(--re)}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:6px}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;filter:none!important;box-shadow:none!important}
+.abar{display:flex;align-items:center;gap:7px;padding-top:12px;border-top:1px solid var(--b0);margin-top:12px;flex-wrap:wrap}
+
+/* ──────── LOADER ──────── */
+.spin{width:13px;height:13px;border:2px solid var(--b1);border-top-color:var(--lime);border-radius:50%;animation:sp .6s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ld{display:none;align-items:center;gap:7px;font-family:var(--fm);font-size:11px;color:var(--t1);padding:7px 0}
+.ld.on{display:flex}
+.pw{background:var(--s4);border-radius:2px;height:2px;overflow:hidden;margin-top:5px;display:none}
+.pb{height:100%;background:linear-gradient(90deg,var(--lime),var(--or));width:0;transition:width .35s}
+
+/* ──────── PHASE SELECTOR ──────── */
+.phase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}
+.phcard{background:var(--s3);border:1.5px solid var(--b0);border-radius:var(--rr2);padding:12px 13px;cursor:pointer;transition:all .2s}
+.phcard:hover{border-color:var(--b1)}.phcard.on{border-color:var(--lime);background:rgba(200,255,92,.03)}
+.phn{font-family:var(--fh);font-size:12px;font-weight:800;color:#fff;margin-bottom:2px}
+.phr{font-family:var(--fm);font-size:9px;color:var(--t2);margin-bottom:6px}
+.phd{font-size:11px;color:var(--t1);line-height:1.6;margin-bottom:7px}
+.ph-ratios{display:flex;gap:3px;flex-wrap:wrap}
+.phtag{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:3px}
+.pt-aw{background:rgba(61,255,176,.1);color:var(--te)}
+.pt-en{background:rgba(200,255,92,.1);color:var(--lime)}
+.pt-li{background:rgba(255,140,60,.1);color:var(--or)}
+.pt-tr{background:rgba(56,184,255,.1);color:var(--tc)}
+
+/* ──────── PLATFORM PICKER ──────── */
+.psrow{display:flex;gap:6px}
+.ps{display:flex;align-items:center;gap:6px;padding:5px 13px;border-radius:18px;border:1.5px solid var(--b0);font-family:var(--fh);font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;color:var(--t1)}
+.ps:hover{border-color:var(--b1)}
+.ps.on{border-color:var(--c);color:var(--c);background:rgba(255,255,255,.02)}
+.ps[data-p=x]{--c:var(--xc)}.ps[data-p=ig]{--c:var(--ic)}.ps[data-p=th]{--c:var(--tc)}
+.psd{width:5px;height:5px;border-radius:50%;background:var(--c);opacity:.3}
+.ps.on .psd{opacity:1}
+
+/* ──────── WEEK CALENDAR ──────── */
+.wgrid{display:flex;flex-direction:column;gap:9px}
+.dcard{background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr2);overflow:hidden}
+.dhead{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid var(--b0);cursor:pointer;transition:background .15s}
+.dhead:hover{background:rgba(255,255,255,.015)}
+.dlabel{font-family:var(--fh);font-size:13px;font-weight:800;color:#fff}
+.dmeta{display:flex;align-items:center;gap:7px}
+.dintent{font-family:var(--fm);font-size:9px;padding:2px 7px;border-radius:3px}
+.di-aw{background:rgba(61,255,176,.1);color:var(--te)}
+.di-en{background:rgba(200,255,92,.1);color:var(--lime)}
+.di-li{background:rgba(255,140,60,.12);color:var(--or)}
+.di-tr{background:rgba(56,184,255,.1);color:var(--tc)}
+.dfocus{font-family:var(--fm);font-size:9px;color:var(--t2)}
+.dbody{padding:11px 13px;display:flex;flex-direction:column;gap:9px}
+
+/* ──────── POST ITEM ──────── */
+.pitem{background:var(--s4);border:1px solid var(--b0);border-radius:var(--rr);padding:10px 12px}
+.pihead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.piplat{font-family:var(--fh);font-size:11px;font-weight:800}
+.pix{color:var(--xc)}.piig{color:var(--ic)}.pith{color:var(--tc)}
+.pitags{display:flex;gap:4px}
+.pitag{font-family:var(--fm);font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(255,255,255,.04);color:var(--t1)}
+.line-tag{background:rgba(255,140,60,.1);color:var(--or)}
+.ptext{font-size:12px;color:var(--t1);line-height:1.78;white-space:pre-wrap;margin-bottom:7px}
+.pactions{display:flex;gap:5px;flex-wrap:wrap}
+.cpbtn{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:6px;background:var(--s2);border:1px solid var(--b0);font-family:var(--fh);font-size:11px;font-weight:700;color:var(--t1);cursor:pointer;transition:all .15s}
+.cpbtn:hover{border-color:var(--lime);color:var(--lime)}
+.cpbtn.done{border-color:var(--te);color:var(--te);background:rgba(61,255,176,.05)}
+.htrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.htg{font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:3px;cursor:pointer;transition:filter .15s}
+.htg:hover{filter:brightness(1.35)}
+.htx{background:rgba(221,232,248,.06);border:1px solid rgba(221,232,248,.1);color:var(--xc)}
+.htig{background:rgba(232,112,255,.06);border:1px solid rgba(232,112,255,.12);color:var(--ic)}
+.htth{background:rgba(56,184,255,.06);border:1px solid rgba(56,184,255,.12);color:var(--tc)}
+
+/* ──────── OUTPUT BOXES ──────── */
+.outgrid{display:grid;gap:11px}
+.obox{background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr2);padding:12px;display:flex;flex-direction:column;gap:7px;transition:border-color .2s}
+.obox:focus-within{border-color:rgba(200,255,92,.2)}
+.obhead{display:flex;align-items:center;justify-content:space-between}
+.oname{font-family:var(--fh);font-size:12px;font-weight:800}
+.on-x{color:var(--xc)}.on-ig{color:var(--ic)}.on-th{color:var(--tc)}
+.obox textarea{min-height:180px;font-size:12px;line-height:1.78}
+.ofoot{display:flex;align-items:center;justify-content:space-between}
+.ccount{font-family:var(--fm);font-size:10px;color:var(--t2)}
+.ccount.w{color:var(--lime)}.ccount.ov{color:var(--re)}
+
+/* ──────── HISTORY ──────── */
+.hitem{background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr2);padding:12px 15px;margin-bottom:8px;transition:border-color .15s}
+.hitem:hover{border-color:var(--b1)}
+.hitem-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;gap:7px}
+.htitle{font-family:var(--fh);font-size:13px;font-weight:700;color:#fff;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hmeta{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.hdate{font-family:var(--fm);font-size:9px;color:var(--t2)}
+.hprev{font-size:11px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hexp{display:none;margin-top:10px}.hexp.on{display:block}
+.hpblock{margin-bottom:9px}
+.hptext{font-size:11px;color:var(--t1);line-height:1.75;background:var(--s4);border-radius:var(--rr);padding:9px 11px;white-space:pre-wrap;border:1px solid var(--b0)}
+
+/* ──────── DEPLOY GUIDE ──────── */
+.deploy-step{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr);margin-bottom:7px}
+.dsnum{font-family:var(--fm);font-size:10px;color:var(--lime);flex-shrink:0;width:18px;margin-top:1px;font-weight:500}
+.dsbody{font-size:12px;color:var(--t1);line-height:1.7;flex:1}
+.dsbody a{color:var(--lime);text-decoration:none}.dsbody a:hover{text-decoration:underline}
+.dscode{font-family:var(--fm);font-size:11px;background:var(--s4);border:1px solid var(--b0);border-radius:5px;padding:2px 7px;color:var(--tx);display:inline-block;margin:2px 0}
+
+/* ──────── TOAST ──────── */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--s2);border:1px solid var(--b1);border-radius:var(--rr);padding:9px 14px;font-size:12px;color:var(--tx);z-index:999;transform:translateY(10px) scale(.97);opacity:0;transition:all .2s;pointer-events:none;font-family:var(--fh);font-weight:700;max-width:280px}
+.toast.show{transform:none;opacity:1}
+.toast.ok{border-color:rgba(200,255,92,.35);color:var(--lime)}
+.toast.cp{border-color:rgba(61,255,176,.3);color:var(--te)}
+.toast.err{border-color:rgba(255,77,109,.3);color:var(--re)}
+
+/* ──────── MISC ──────── */
+.slbl{font-family:var(--fm);font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.9px;margin-bottom:6px}
+.tgrow{display:flex;flex-direction:column;gap:4px}
+.tgr{display:flex;align-items:center;justify-content:space-between;padding:6px 9px;background:var(--s3);border-radius:7px;font-size:12px}
+.tnm{font-family:var(--fm);color:var(--t1)}.tvl{font-family:var(--fm);color:var(--lime);font-weight:500}
+.tipbox{background:rgba(200,255,92,.04);border:1px solid rgba(200,255,92,.13);border-radius:var(--rr);padding:10px 13px;font-size:12px;color:var(--t1);line-height:1.8;margin-top:10px}
+.tipbox strong{color:var(--lime)}
+.empty{text-align:center;padding:32px;color:var(--t2);font-family:var(--fm);font-size:11px;line-height:2}
+.cx{color:var(--xc)}.ci{color:var(--ic)}.ct{color:var(--tc)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--s4);border-radius:3px}
+@keyframes fin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.dcard{animation:fin .22s ease both}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="logo">
+    <div class="lmark">⚡</div>
+    <span class="lname">SNS Autopilot</span>
+    <span class="lbadge">DM集客 × AI最適化</span>
+  </div>
+  <div class="tabs">
+    <div class="tb on" data-pg="setup" onclick="goTab(this)">設定</div>
+    <div class="tb" data-pg="week" onclick="goTab(this)">週間プラン</div>
+    <div class="tb" data-pg="single" onclick="goTab(this)">単発生成</div>
+    <div class="tb" data-pg="trend" onclick="goTab(this)">🔥 トレンド収集</div>
+    <div class="tb" data-pg="optimize" onclick="goTab(this)">✨ AI最適化</div>
+    <div class="tb" data-pg="xstats" onclick="goTab(this)">📊 自分の分析</div>
+    <div class="tb" data-pg="history" onclick="goTab(this)">保存済み <span class="nbadge" id="hcnt">0</span></div>
+    <div class="tb" data-pg="deploy" onclick="goTab(this)">公開方法</div>
+  </div>
+  <div class="hdr-r">
+    <div style="display:flex;align-items:center;gap:6px;margin-right:8px">
+      <div id="api-dot" style="width:7px;height:7px;border-radius:50%;background:var(--t2);transition:all .3s;flex-shrink:0"></div>
+      <span id="api-lbl" style="font-family:var(--fm);font-size:10px;color:var(--t1);white-space:nowrap">API未接続</span>
+    </div>
+    <div class="phase-chip" onclick="goTab(document.querySelector('[data-pg=setup]'))" id="pchip">
+      <div class="pdot" id="pdot"></div>
+      <span id="plabel" style="font-family:var(--fm);font-size:10px">未設定</span>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- ══════ SETUP ══════ -->
+<div class="pg on" id="pg-setup">
+  <div class="card">
+    <div class="chtitle">アカウント基本情報</div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">発信ジャンル・テーマ</div>
+        <input type="text" id="s-genre" placeholder="例: 副業・ビジネス、AI活用、投資、美容…" value="副業・ビジネス">
+      </div>
+      <div class="ig" style="max-width:150px">
+        <div class="lbl">現在のフォロワー数</div>
+        <input type="number" id="s-flw" value="0" min="0" placeholder="0">
+      </div>
+    </div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">ターゲット読者（具体的に）</div>
+        <input type="text" id="s-target" placeholder="例: 副業に興味がある20〜30代の会社員" value="副業に興味がある20〜30代の会社員">
+      </div>
+      <div class="ig" style="max-width:150px">
+        <div class="lbl">発信トーン</div>
+        <select id="s-tone">
+          <option value="honest">正直・等身大</option>
+          <option value="casual">カジュアル</option>
+          <option value="pro">プロフェッショナル</option>
+          <option value="moti">熱血・モチベ</option>
+          <option value="data">データ・根拠重視</option>
+        </select>
+      </div>
+    </div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">DMで伝える特典・誘導先メモ（省略可）</div>
+        <input type="url" id="s-line" placeholder="例：相談はプロフのDMからどうぞ">
+      </div>
+      <div class="ig" style="max-width:230px">
+        <div class="lbl">DM誘導の特典・オファー（省略可）</div>
+        <input type="text" id="s-gift" placeholder="例: 例：無料相談、限定資料プレゼント">
+      </div>
+    </div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">使用するSNS</div>
+        <div class="psrow" style="margin-top:3px">
+          <div class="ps on" data-p="x" onclick="this.classList.toggle('on')"><div class="psd"></div>X</div>
+          <div class="ps on" data-p="ig" onclick="this.classList.toggle('on')"><div class="psd"></div>Instagram</div>
+          <div class="ps on" data-p="th" onclick="this.classList.toggle('on')"><div class="psd"></div>Threads</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-y" onclick="applySetup()">設定を保存 → フェーズを確認</button>
+  </div>
+
+  <div id="phase-display" style="display:none">
+    <div class="card">
+      <div class="chtitle">アカウント育成フェーズ — 現在地と戦略</div>
+      <div class="phase-grid" id="phase-cards"></div>
+      <div class="tipbox" id="phase-tip"></div>
+    </div>
+    <div class="card">
+      <div class="chtitle">DM集客ロードマップ</div>
+      <div id="line-roadmap"></div>
+    </div>
+    <div class="abar" style="border:none;padding:0;margin:0">
+      <button class="btn btn-y" onclick="goTab(document.querySelector('[data-pg=week]'))">週間プランを作成する →</button>
+      <button class="btn btn-g" onclick="goTab(document.querySelector('[data-pg=single]'))">単発で1投稿だけ作る</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ WEEK PLAN ══════ -->
+<div class="pg" id="pg-week">
+  <div class="card">
+    <div class="chtitle">1週間 投稿プラン生成</div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">今週のメインテーマ（空欄でジャンルから自動設定）</div>
+        <input type="text" id="w-theme" placeholder="例: 副業の始め方、ChatGPT×副業、月10万円の作り方…">
+      </div>
+      <div class="ig" style="max-width:145px">
+        <div class="lbl">週の投稿本数</div>
+        <select id="w-cnt">
+          <option value="7">7本（1日1本）</option>
+          <option value="14" selected>14本（1日2本）</option>
+          <option value="21">21本（1日3本）</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-y" onclick="genWeek()">1週間分のプランを生成する</button>
+    <div class="ld" id="w-ld"><div class="spin"></div><span id="w-msg">フェーズを分析中…</span></div>
+    <div class="pw" id="w-pw"><div class="pb" id="w-pb"></div></div>
+  </div>
+
+  <div id="w-out" style="display:none">
+    <div class="tipbox" id="w-tip" style="margin-bottom:12px"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
+      <div style="font-family:var(--fh);font-size:16px;font-weight:800;color:#fff">今週の投稿カレンダー</div>
+      <div style="display:flex;gap:7px">
+        <button class="btn btn-g btn-sm" onclick="copyWeekAll()">📋 全件コピー</button>
+        <button class="btn btn-te btn-sm" onclick="saveWeek()">💾 保存</button>
+      </div>
+    </div>
+    <div class="wgrid" id="w-grid"></div>
+  </div>
+</div>
+
+<!-- ══════ SINGLE ══════ -->
+<div class="pg" id="pg-single">
+  <div class="card">
+    <div class="chtitle">単発投稿生成</div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">投稿テーマ（具体的に）</div>
+        <input type="text" id="g-theme" placeholder="例: 副業で月10万円稼いだ方法、ChatGPTで仕事を3倍速にした話…">
+      </div>
+    </div>
+    <div class="ir">
+      <div class="ig" style="max-width:180px">
+        <div class="lbl">投稿タイプ</div>
+        <select id="g-type">
+          <option value="awareness">👀 認知・共感型</option>
+          <option value="engage">💬 エンゲージメント型</option>
+          <option value="line">📩 DM集客型</option>
+          <option value="trend">🔥 トレンド便乗型</option>
+        </select>
+      </div>
+      <div class="ig" style="max-width:180px">
+        <div class="lbl">フォーマット</div>
+        <select id="g-fmt">
+          <option value="tips">Tips・ノウハウ型</option>
+          <option value="story">体験談・ストーリー型</option>
+          <option value="list">リスト・まとめ型</option>
+          <option value="opinion">意見・持論型</option>
+          <option value="ba">ビフォーアフター型</option>
+          <option value="mistake">やってはいけない型</option>
+          <option value="number">数字で語る型</option>
+        </select>
+      </div>
+      <div class="ig" style="max-width:140px">
+        <div class="lbl">SNS</div>
+        <select id="g-plat">
+          <option value="all">全プラットフォーム</option>
+          <option value="x">X (Twitter)</option>
+          <option value="ig">Instagram</option>
+          <option value="th">Threads</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:7px">
+      <button class="btn btn-y" onclick="genSingle()">投稿文を生成</button>
+      <div class="ld" id="g-ld"><div class="spin"></div>生成中…</div>
+    </div>
+  </div>
+  <div id="g-out" style="display:none"></div>
+</div>
+
+<!-- ══════ TREND ══════ -->
+<div class="pg" id="pg-trend">
+  <div class="card">
+    <div class="chtitle">🔥 トレンド収集 × バズパターン分析</div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">収集キーワード</div>
+        <input type="text" id="tr-q" placeholder="例: 副業 月10万、ChatGPT 副業、在宅ワーク…" value="副業 月10万">
+      </div>
+      <div class="ig" style="max-width:90px">
+        <div class="lbl">件数</div>
+        <select id="tr-max"><option value="5">5件</option><option value="10" selected>10件</option></select>
+      </div>
+      <button class="btn btn-y" onclick="doTrend()">収集 → AI分析</button>
+    </div>
+    <div class="ld" id="tr-ld"><div class="spin"></div><span id="tr-msg">収集中…</span></div>
+    <div id="tr-err" style="display:none;background:rgba(255,77,109,.05);border:1px solid rgba(255,77,109,.2);border-radius:var(--rr);padding:10px 13px;font-size:12px;color:#ff4d6d;margin-top:8px"></div>
+  </div>
+
+  <div id="tr-insight" style="display:none">
+    <div class="card" style="border-color:rgba(200,255,92,.2)">
+      <div class="chtitle">AIが抽出したトレンドパターン</div>
+      <div id="tr-trends" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+      <div id="tr-insight-text" style="background:rgba(200,255,92,.04);border:1px solid rgba(200,255,92,.12);border-radius:var(--rr);padding:10px 13px;font-size:12px;color:var(--t1);line-height:1.8;margin-bottom:12px"></div>
+      <div id="tr-patterns" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px"></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;margin-top:4px">
+      <div style="font-family:var(--fh);font-size:14px;font-weight:800;color:#fff">バズ投稿サンプル <span id="tr-count" style="font-family:var(--fm);font-size:11px;color:var(--t1)"></span></div>
+      <div style="font-family:var(--fm);font-size:10px;color:var(--t2)">いいね＋RT 多い順</div>
+    </div>
+    <div id="tr-list" style="display:flex;flex-direction:column;gap:9px"></div>
+  </div>
+</div>
+
+<!-- ══════ OPTIMIZE ══════ -->
+<div class="pg" id="pg-optimize">
+  <div class="card">
+    <div class="chtitle">✨ AI最適化 — 投稿文をバズり仕様に修正</div>
+    <div class="tipbox" style="margin-bottom:11px">
+      <strong>使い方：</strong> 週間プランや単発生成で作った投稿文を貼り付けると、AIがトレンドとバズパターンを元に最適化します。
+    </div>
+    <div class="ir">
+      <div class="ig">
+        <div class="lbl">最適化したい投稿文（貼り付けてください）</div>
+        <textarea id="opt-draft" rows="6" placeholder="ここに投稿文を貼り付ける…&#10;&#10;週間プランや単発生成で作った文をコピー&ペーストしてください。"></textarea>
+      </div>
+    </div>
+    <div class="ir">
+      <div class="ig" style="max-width:160px">
+        <div class="lbl">参考にするトレンド</div>
+        <select id="opt-mode">
+          <option value="latest">直近のバズ投稿を自動取得</option>
+          <option value="cached">前回収集したトレンドを使用</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn btn-y" onclick="doOptimize()">✨ AIで最適化する</button>
+      <div class="ld" id="opt-ld"><div class="spin"></div><span id="opt-msg">最適化中…</span></div>
+    </div>
+    <div id="opt-err" style="display:none;background:rgba(255,77,109,.05);border:1px solid rgba(255,77,109,.2);border-radius:var(--rr);padding:10px 13px;font-size:12px;color:#ff4d6d;margin-top:8px"></div>
+  </div>
+
+  <div id="opt-out" style="display:none">
+    <div class="card" style="border-color:rgba(200,255,92,.2)">
+      <div class="chtitle">AI最適化済み投稿文</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <div style="font-family:var(--fm);font-size:9px;color:var(--t2);text-transform:uppercase;margin-bottom:6px">修正前</div>
+          <div id="opt-before" style="font-size:12px;color:var(--t2);line-height:1.78;background:var(--s3);border-radius:var(--rr);padding:11px 13px;white-space:pre-wrap;border:1px solid var(--b0);min-height:120px"></div>
+        </div>
+        <div>
+          <div style="font-family:var(--fm);font-size:9px;color:var(--lime);text-transform:uppercase;margin-bottom:6px">AI最適化後 ✨</div>
+          <textarea id="opt-after" style="font-size:12px;line-height:1.78;min-height:120px;border-color:rgba(200,255,92,.25)"></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
+            <div id="opt-count" style="font-family:var(--fm);font-size:10px;color:var(--t2)"></div>
+            <button class="cbtn btn-sm" id="opt-cpbtn" onclick="cpOptimized()">📋 コピー</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:7px;margin-top:11px;padding-top:11px;border-top:1px solid var(--b0)">
+        <button class="btn btn-y btn-sm" onclick="doOptimize()">🔄 再最適化</button>
+        <button class="btn btn-g btn-sm" onclick="saveOptimized()">💾 保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ XSTATS ══════ -->
+<div class="pg" id="pg-xstats">
+  <div class="card">
+    <div class="chtitle">📊 自分のアカウント分析（X API）</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn btn-y" onclick="doXStats()">自分の投稿を分析する</button>
+      <div class="ld" id="xst-ld"><div class="spin"></div>分析中…</div>
+    </div>
+    <div id="xst-err" style="display:none;background:rgba(255,77,109,.05);border:1px solid rgba(255,77,109,.2);border-radius:var(--rr);padding:10px 13px;font-size:12px;color:#ff4d6d;margin-top:8px"></div>
+  </div>
+  <div id="xst-out" style="display:none">
+    <div id="xst-profile" style="margin-bottom:12px"></div>
+    <div id="xst-kpi" style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:13px"></div>
+    <div class="card"><div class="chtitle">最新投稿のパフォーマンス</div><div id="xst-posts" style="display:flex;flex-direction:column;gap:8px"></div></div>
+  </div>
+</div>
+
+
+<!-- ══════ HISTORY ══════ -->
+<div class="pg" id="pg-history">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px">
+    <div>
+      <div style="font-family:var(--fh);font-size:18px;font-weight:800;color:#fff">保存済み投稿・プラン</div>
+      <div style="font-family:var(--fm);font-size:10px;color:var(--t2);margin-top:2px">クリックで展開 → 再コピー可能</div>
+    </div>
+    <div style="display:flex;gap:7px">
+      <button class="btn btn-g btn-sm" onclick="exportAll()">📤 全件エクスポート</button>
+      <button class="btn btn-re btn-sm" onclick="clearAll()">🗑 全削除</button>
+    </div>
+  </div>
+  <div id="hist"></div>
+</div>
+
+<!-- ══════ DEPLOY ══════ -->
+<div class="pg" id="pg-deploy">
+  <div class="card">
+    <div class="chtitle">GitHub Pages で無料公開する手順（5分）</div>
+    <div style="font-size:12px;color:var(--t1);margin-bottom:12px;line-height:1.8">
+      このHTMLファイル1つをアップロードするだけで、URLを知っている全員がアクセスできるWebアプリになります。サーバー代・月額費用は一切かかりません。
+    </div>
+
+    <div class="deploy-step">
+      <div class="dsnum">01</div>
+      <div class="dsbody"><strong style="color:var(--tx)">GitHubアカウントを作成</strong><br><a href="https://github.com" target="_blank">github.com</a> にアクセスして「Sign up」→ メールアドレスで無料登録（Googleアカウントでも可）</div>
+    </div>
+    <div class="deploy-step">
+      <div class="dsnum">02</div>
+      <div class="dsbody"><strong style="color:var(--tx)">新しいリポジトリを作成</strong><br>ログイン後、右上「+」→「New repository」→ Repository nameに<span class="dscode">sns-autopilot</span>と入力 → 「Public」を選択 → 「Create repository」</div>
+    </div>
+    <div class="deploy-step">
+      <div class="dsnum">03</div>
+      <div class="dsbody"><strong style="color:var(--tx)">HTMLファイルをアップロード</strong><br>このファイル（sns_autopilot_final.html）を<span class="dscode">index.html</span>にリネーム → リポジトリページの「uploading an existing file」をクリック → ドラッグ&ドロップ → 「Commit changes」</div>
+    </div>
+    <div class="deploy-step">
+      <div class="dsnum">04</div>
+      <div class="dsbody"><strong style="color:var(--tx)">GitHub Pages を有効化</strong><br>リポジトリの「Settings」タブ → 左メニュー「Pages」→ Branch: <span class="dscode">main</span> → folder: <span class="dscode">/(root)</span> → 「Save」</div>
+    </div>
+    <div class="deploy-step">
+      <div class="dsnum">05</div>
+      <div class="dsbody"><strong style="color:var(--tx)">URLをシェア</strong><br>1〜2分後に<span class="dscode">https://あなたのユーザーID.github.io/sns-autopilot/</span>でアクセス可能になります。このURLを知人・SNSでシェアするだけで誰でも使えます。</div>
+    </div>
+
+    <div class="tipbox" style="margin-top:12px">
+      <strong>💡 ポイント：</strong> 全データはブラウザの localStorage に保存されます。他の人が使っても、あなたの設定・投稿履歴には影響しません。それぞれが独立したデータを持ちます。
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════
+//  STATE
+// ══════════════════════════════
+const DBKEY = 'snsa6';
+let saved = JSON.parse(localStorage.getItem(DBKEY) || '[]');
+let cfg   = JSON.parse(localStorage.getItem(DBKEY + 'cfg') || '{}');
+let wdata = [];
+
+const PL = {
+  x:  {name:'X / Twitter', short:'X',  ocls:'on-x',  hcls:'htx',  limit:280},
+  ig: {name:'Instagram',   short:'IG', ocls:'on-ig', hcls:'htig', limit:2200},
+  th: {name:'Threads',     short:'TH', ocls:'on-th', hcls:'htth', limit:500},
+};
+
+// ══════════════════════════════
+//  INIT
+// ══════════════════════════════
+window.addEventListener('load', () => {
+  if (cfg.genre)    document.getElementById('s-genre').value  = cfg.genre;
+  if (cfg.flw != null) document.getElementById('s-flw').value = cfg.flw;
+  if (cfg.target)   document.getElementById('s-target').value = cfg.target;
+  if (cfg.tone)     document.getElementById('s-tone').value   = cfg.tone;
+  if (cfg.line)     document.getElementById('s-line').value   = cfg.line;
+  if (cfg.gift)     document.getElementById('s-gift').value   = cfg.gift;
+  if (cfg.platforms) {
+    document.querySelectorAll('#pg-setup .ps').forEach(ps =>
+      ps.classList.toggle('on', cfg.platforms.includes(ps.dataset.p)));
+  }
+  if (cfg.phase) { updateChip(cfg.phase); renderPhaseDisplay(); }
+  updateHcnt();
+  renderHistory();
+});
+
+// ══════════════════════════════
+//  NAV / TOAST
+// ══════════════════════════════
+function goTab(el) {
+  document.querySelectorAll('.tb').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.getElementById('pg-' + el.dataset.pg).classList.add('on');
+}
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = `toast show ${type}`;
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2700);
+}
+
+// ══════════════════════════════
+//  PHASE DATA
+// ══════════════════════════════
+const PHASES = {
+  seed: {
+    key:'seed', name:'種まき期', range:'〜300', dot:'#3dffb0',
+    desc:'まず存在を知ってもらう。量と一貫性最優先。',
+    ratios:{aw:60,en:30,li:5,tr:5},
+    lineCTA: [
+      'プロフィールのDMからお気軽にご連絡ください🙏',
+      '詳しい内容はプロフィールのDMでお伝えしています📩',
+    ],
+    lineStrength: 'soft',
+    tip:'この時期はまず「認知」に全力を。フォロワーが少ないうちのDM誘導は逆効果になりがち。まずプロフにDMを促す一言を添えるだけでOK。フォロワーが300を超えたら次のフェーズへ。',
+    plan:[
+      {intent:'aw',focus:'自己紹介・価値観発信'},
+      {intent:'aw',focus:'ノウハウ・Tips（共感系）'},
+      {intent:'en',focus:'質問・議論誘発投稿'},
+      {intent:'aw',focus:'体験談・失敗談'},
+      {intent:'aw',focus:'リスト・まとめ（保存狙い）'},
+      {intent:'en',focus:'ビフォーアフター（RT狙い）'},
+      {intent:'tr',focus:'トレンド便乗ネタ'},
+    ],
+  },
+  grow: {
+    key:'grow', name:'育成期', range:'300〜1000', dot:'#c8ff5c',
+    desc:'信頼を積み上げる。フォロー率とエンゲージを高める。',
+    ratios:{aw:50,en:30,li:15,tr:5},
+    lineCTA: [
+      'DMで限定情報をお届けしています📩 プロフィールからDMをどうぞ✅',
+      '【DMで無料プレゼント中🎁】プロフィールからDMしてくれた方に【〇〇】をお送りします！',
+      '詳しい内容はDMでお伝えしています→プロフィールからDMをどうぞ📲',
+    ],
+    lineStrength: 'mid',
+    tip:'エンゲージメントを高めながら、週1〜2回はDMを促す投稿を入れる。「プロフのDMからどうぞ」など自然な形で誘導することが重要。押し売り感は禁物。',
+    plan:[
+      {intent:'aw',focus:'専門知識・ノウハウ深掘り'},
+      {intent:'en',focus:'読者の悩みに答える投稿'},
+      {intent:'aw',focus:'体験談・成果報告'},
+      {intent:'li',focus:'DM誘導（特典訴求）'},
+      {intent:'en',focus:'コミュニティ感UP投稿'},
+      {intent:'tr',focus:'トレンド×ジャンル掛け合わせ'},
+      {intent:'li',focus:'週末DM誘導（まとめ型）'},
+    ],
+  },
+  engage: {
+    key:'engage', name:'集客期', range:'1000〜5000', dot:'#ff8c3c',
+    desc:'信頼が溜まってきた。DM集客を本格化するタイミング。',
+    ratios:{aw:35,en:25,li:30,tr:10},
+    lineCTA: [
+      '【DMで無料プレゼント中🎁】プロフィールからDMしてくれた方に【〇〇】をお送りします！\nぜひお気軽にDMしてください📩',
+      'DMで無料相談受付中🎯 プロフィールからDMをどうぞ→先着〇名限定✅',
+      '【DM限定】〇〇を無料でお届けしています📲\nすでに〇〇人にお届けしました！プロフィールからDMをどうぞ！',
+    ],
+    lineStrength: 'strong',
+    tip:'週3本はDM誘導投稿を入れる。「DMで無料相談受付中」「限定資料をDMでプレゼント」など具体的なフックを使う。価値提供の投稿とセットにすると自然に誘導できる。',
+    plan:[
+      {intent:'li',focus:'DM特典の価値訴求'},
+      {intent:'aw',focus:'価値提供・ノウハウ系'},
+      {intent:'en',focus:'エンゲージ最大化・議論'},
+      {intent:'li',focus:'DM誘導（実績・事例型）'},
+      {intent:'aw',focus:'体験談・信頼構築'},
+      {intent:'li',focus:'DM限定オファー訴求'},
+      {intent:'tr',focus:'トレンド×集客の合わせ技'},
+    ],
+  },
+  monetize: {
+    key:'monetize', name:'収益化期', range:'5000〜', dot:'#9d7fff',
+    desc:'フォロワーの信頼が資産。積極的な募集・販売が可能。',
+    ratios:{aw:25,en:20,li:45,tr:10},
+    lineCTA: [
+      '【DM限定募集中📩】残り〇席です。プロフィールからDMしてください！\n今すぐDMをどうぞ！',
+      '【DMで先行案内中🎯】〇〇の無料相談をDMで受付中\nプロフィールから今すぐDMしてください✅',
+      '今回の募集はDM限定の先行案内のみ📲\nプロフィールからDMしてくれた方に詳細をお送りします！',
+    ],
+    lineStrength: 'max',
+    tip:'積極的なDM誘導・募集告知が効果的なフェーズ。「DM限定募集中」「先着〇名DM受付」など緊急性を持たせたCTAが有効。価値提供→DM誘導→価値提供のサイクルを維持することが重要。',
+    plan:[
+      {intent:'li',focus:'限定募集・先行案内'},
+      {intent:'aw',focus:'実績・事例公開（購買意欲UP）'},
+      {intent:'li',focus:'DM誘導（緊急性訴求）'},
+      {intent:'en',focus:'ファンコミュニティ強化'},
+      {intent:'li',focus:'サービス詳細・メリット訴求'},
+      {intent:'aw',focus:'専門性アピール・ブランディング'},
+      {intent:'li',focus:'週末クロージング投稿'},
+    ],
+  },
+};
+
+function getPhase(flw) {
+  if (flw < 300) return 'seed';
+  if (flw < 1000) return 'grow';
+  if (flw < 5000) return 'engage';
+  return 'monetize';
+}
+
+const INTENT = {
+  aw: {label:'認知・共感', css:'di-aw'},
+  en: {label:'エンゲージ', css:'di-en'},
+  li: {label:'DM集客', css:'di-li'},
+  tr: {label:'トレンド', css:'di-tr'},
+};
+
+function applySetup() {
+  cfg = {
+    genre:     document.getElementById('s-genre').value || '副業・ビジネス',
+    flw:       parseInt(document.getElementById('s-flw').value) || 0,
+    target:    document.getElementById('s-target').value,
+    tone:      document.getElementById('s-tone').value,
+    line:      document.getElementById('s-line').value.trim(),
+    gift:      document.getElementById('s-gift').value.trim(),
+    platforms: [...document.querySelectorAll('#pg-setup .ps.on')].map(e => e.dataset.p),
+    phase:     getPhase(parseInt(document.getElementById('s-flw').value) || 0),
+  };
+  if (!cfg.platforms.length) { toast('SNSを1つ以上選択してください', 'err'); return; }
+  localStorage.setItem(DBKEY + 'cfg', JSON.stringify(cfg));
+  updateChip(cfg.phase);
+  renderPhaseDisplay();
+  toast('設定を保存しました ✓');
+}
+
+function updateChip(phase) {
+  const pd = PHASES[phase];
+  if (!pd) return;
+  document.getElementById('pdot').style.cssText = `background:${pd.dot};box-shadow:0 0 6px ${pd.dot}80`;
+  document.getElementById('plabel').textContent = pd.name;
+}
+
+function renderPhaseDisplay() {
+  const phase = cfg.phase || 'seed';
+  const phKeys = ['seed','grow','engage','monetize'];
+  document.getElementById('phase-cards').innerHTML = phKeys.map(k => {
+    const pd = PHASES[k]; const isOn = k === phase;
+    return `<div class="phcard${isOn?' on':''}">
+      <div class="phn">${pd.name}</div>
+      <div class="phr">${pd.range}フォロワー</div>
+      <div class="phd">${pd.desc}</div>
+      <div class="ph-ratios">
+        <span class="phtag pt-aw">認知 ${pd.ratios.aw}%</span>
+        <span class="phtag pt-en">ER ${pd.ratios.en}%</span>
+        <span class="phtag pt-li">DM ${pd.ratios.li}%</span>
+        <span class="phtag pt-tr">TR ${pd.ratios.tr}%</span>
+      </div>
+      ${isOn?'<div style="font-family:var(--fm);font-size:8px;color:var(--lime);margin-top:7px">← 現在地</div>':''}
+    </div>`;
+  }).join('');
+
+  const pd = PHASES[phase];
+  document.getElementById('phase-tip').innerHTML = `<strong>📌 ${pd.name}の戦略：</strong>${pd.tip}`;
+
+  // DM roadmap
+  document.getElementById('line-roadmap').innerHTML = [
+    {phase:'種まき期', action:'プロフにDM促す一言を添えるだけ', strength:'ソフト', col:'var(--te)'},
+    {phase:'育成期', action:'DMで特典プレゼント・相談受付を告知', strength:'ミドル', col:'var(--lime)'},
+    {phase:'集客期', action:'週3本はDM誘導投稿・無料相談CTAを入れる', strength:'ストロング', col:'var(--or)'},
+    {phase:'収益化期', action:'DM限定募集・先着案内で緊急性を演出', strength:'マックス', col:'var(--pu)'},
+  ].map((r,i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 11px;background:var(--s3);border-radius:var(--rr);margin-bottom:6px;border:1px solid ${cfg.phase===Object.keys(PHASES)[i]?r.col+'40':'var(--b0)'}">
+      <div style="font-family:var(--fh);font-size:12px;font-weight:700;color:#fff;width:90px;flex-shrink:0">${r.phase}</div>
+      <div style="font-size:12px;color:var(--t1);flex:1">${r.action}</div>
+      <div style="font-family:var(--fm);font-size:9px;padding:2px 7px;border-radius:3px;background:${r.col}18;color:${r.col};flex-shrink:0">${r.strength}</div>
+    </div>`).join('');
+
+  document.getElementById('phase-display').style.display = 'block';
+}
+
+// ══════════════════════════════
+//  CONTENT ENGINE
+// ══════════════════════════════
+const HOOKS = {
+  shock:    [t=>`「${t}」でよく聞く方法、実は逆効果だと最近気づきました。`,t=>`${t}の「常識」を3年信じ続けて損をした話。`,t=>`正直に言います。${t}で結果が出ない本当の理由は努力不足じゃない。`,t=>`${t}を始める前に知っておけばよかった、誰も教えてくれない事実。`],
+  number:   [t=>`${t}を始めて6ヶ月。月0円→月17万円になった具体的な方法を全部話します。`,t=>`${t}で最初の3ヶ月は完全に空振りでした。4ヶ月目に変えた「たった1つのこと」。`,t=>`${t}で失敗する人の9割が最初の30日でやめています。残りの1割がやっていること。`,t=>`${t}を週3時間だけやって月5万円になった手順を再現できる形で公開します。`],
+  secret:   [t=>`${t}で稼いでいる人が絶対に教えない「前提条件」について話します。`,t=>`${t}の攻略法、ほとんどの人が表面しか知らない。本質はここです。`,t=>`${t}を始める人の95%が見落としている最重要ポイントを共有します。`],
+  empathy:  [t=>`「${t}をやりたいけど自分にできるか不安」という気持ち、めちゃわかります。`,t=>`${t}で稼げている人を見て自分には無理だと思っていた時期が私にもありました。`,t=>`「${t}に興味はあるけど何から始めれば…」——それ、2年前の私です。`],
+  question: [t=>`${t}を始めようとしたとき、あなたが最初にぶつかる「壁」は何ですか？`,t=>`「${t}って結局、才能がある人しか無理でしょ」——本当にそう思いますか？`,t=>`もし今日から${t}を始めるとしたら、あなたは最初に何をしますか？`],
+  contrast: [t=>`${t}で失敗する人と成功する人、外から見ると似ているのに結果が全然違う。その差はこれだけ。`,t=>`1年前の私：${t}に興味あるけど怖くて動けない。今の私：月収が2倍になった。変わったのは1つの習慣。`,t=>`「忙しいから無理」と言い続けた3年間と、週3時間だけ${t}を続けた1年間。結果は明白でした。`],
+};
+const FMTS = {
+  tips:{
+    honest:(t,h)=>`${h}\n\n3つに絞って話します。\n\n【その1】まず型を決める\n何でもいいから1つのフォーマットを決めてとことん磨く。あれこれ手を出すのが一番の時間のムダです。\n\n【その2】小さな実績を先に作る\n最初から大きく稼ごうとしない。月1万円の実績が次の5万円への最短ルートになります。\n\n【その3】発信しながら学ぶ\n完璧に準備してから始めようとすると永遠に始まらない。発信の中で学んだことの方が圧倒的に身につきます。`,
+    casual:(t,h)=>`${h}\n\n大事なポイントを3つだけ！\n\n①まず1つに絞ること\n色々やりたくなるけど、最初は1つを徹底的にやった方が絶対に早いです。\n\n②小さく始めること\n月5万円より月1万円の方が実は難しい。小さな成功体験を積み上げていきましょう。\n\n③行動しながら学ぶこと\n準備しすぎてスタートが遅れるのが一番もったいない！まず動いて修正していく方がずっと速い。`,
+    pro:(t,h)=>`${h}\n\n重要な3点をお伝えします。\n\n■ポイント①：戦略的な特化\n自分のリソースに合った1つの手法に集中することが成果への最短経路です。\n\n■ポイント②：小さな検証の積み重ね\n大きなリスクを取る前に小規模で仮説を検証する。この姿勢が長期的な安定につながります。\n\n■ポイント③：発信と収益の同時設計\n情報発信と収益化を最初から連動させて設計することで、フォロワーが収益に直結する構造が生まれます。`,
+    moti:(t,h)=>`${h}\n\n結果を出す人の共通点を全部話します。\n\n🔥第1法則「特化が最速」\n広く浅くやっていてはいつまでも誰にも刺さらない。尖ることを恐れるな。\n\n🔥第2法則「小さく積み上げる」\n月100万円より月1万円の方が設計が難しい。一歩一歩が後から大きな一歩になっている。\n\n🔥第3法則「諦める前に試行錯誤せよ」\n結果が出ないのは才能じゃない。方法が違うだけ。全ての方法を試してからでも遅くない。`,
+    data:(t,h)=>`${h}\n\nデータが明確なパターンを示しています。\n\n📊発信頻度と収益の関係\n・週7回以上 → 3ヶ月以内に反応が出始める確率：61%\n・週3〜6回 → 同：38%\n・週2回以下 → 同：12%\n\n📊特化vs広域\n・特定テーマに特化したアカウントの平均ER：4.8%\n・複数テーマを扱うアカウント：1.9%\n\n結論：特化×継続×週4発信が最もシンプルな成功公式です。`,
+  },
+  story:{
+    honest:(t,h)=>`${h}\n\n最初の2ヶ月、本当に何も結果が出なかった。\n\n「やっぱり自分には向いてないのかな」と何度も思った。\nでもある時気づいた。やり方を変えてないのに、結果だけを変えようとしていたことに。\n\n小さく変えた。それだけで3ヶ月目から数字が動き始めた。\n\n大事なのは諦めるんじゃなくて「やり方を疑う」こと。それだけで全然違う景色になりました。`,
+    casual:(t,h)=>`${h}\n\n正直言うと最初は全然うまくいかなかったんですよね笑\n\n「なんで自分だけ結果でないんだろ…」って落ち込んでた時期、けっこう長かった。\n\nでも転機があって。「うまくいってる人のやり方をそのままコピーする」だけにしたんです。\n\nそしたらいきなり動き出した。才能じゃなくて正しいやり方を知ってるかどうかだけなんだなって気づきました。`,
+    moti:(t,h)=>`${h}\n\nそれでも続けた。それだけです。\n\n最初の3ヶ月、収益ゼロ。周りには「無理じゃない？」と言われた。\n自分でも「向いてないのかも」と思った。\n\nでも続けた。やり方を変えながら、続けた。\n\n6ヶ月目、初めて1万円が入った時の感覚は今でも覚えている。「あ、できる」って。\nあなたが今しんどいなら、まだ諦めるには早い。`,
+    pro:(t,h)=>`${h}\n\n当初、私は根本的な前提を誤っていました。\n\n「努力量を増やせば結果が出る」という思い込みが最大の障壁でした。\n\n転機となったのは、成果を出している人のアプローチを徹底的に分析し「何をやらないか」を明確化したことです。\n\n戦略的な絞り込みと検証サイクルの最短化。この2点を変えた結果3ヶ月で状況が大きく変わりました。`,
+    data:(t,h)=>`${h}\n\n私の経験を数値で整理するとこうなります。\n\n・開始から収益発生まで：約87日\n・最初の月収1万円達成：開始4ヶ月目\n・月収5万円突破：開始8ヶ月目\n・改善を行った回数：14回\n\nこの数字から見えることは「最初から上手くいかないのが普通」ということ。\n改善を繰り返す前提で始めれば失敗は損失ではなくデータになります。`,
+  },
+  list:{
+    honest:(t,h)=>`${h}\n\n失敗した経験から言える「やらなくてよかったこと」リスト。\n\n❌複数の方法を同時に試す → 何が効いているか分からなくなる\n❌完璧な準備が整ってから始める → 永遠に始まらない\n❌成功した人の「結果」だけを見て真似る → 前提条件が違いすぎる\n❌月収の数字だけで目標設定 → 行動目標に落とし込まないと動けない\n❌一人で抱え込む → 同じ目標の人と繋がるだけで速度が変わる`,
+    casual:(t,h)=>`${h}\n\n${t}を始めてから気づいたことをリストにしました🗒\n\n✅やって良かったこと\n・とにかく早く始めた（完璧を求めなかった）\n・うまくいってる人のやり方をそのままコピーした\n・失敗をSNSでそのまま発信した（むしろ反応が良かった）\n\n⚠️やらなきゃよかったこと\n・最初から色々手を出した\n・結果が出ないのを「センスのせい」にした\n・完璧な準備をしてから始めようとした`,
+    moti:(t,h)=>`${h}\n\n結果を出した人に共通していた習慣を全部書く。\n\n⚡毎日1つだけ「試す」 → 小さな実験の積み重ねが全てを変える\n⚡失敗を「公開する」 → 失敗談はフォロワーが増え信頼が上がる\n⚡数字だけを見ない → 「誰の役に立ったか」を先に考える人が長く稼ぐ\n⚡環境を変える → 同じ目標の人と繋がった瞬間、速度が2倍になる\n⚡諦めるタイミングを決めておく → 「〇ヶ月やってダメなら方向転換」と決めると迷わず動ける`,
+    data:(t,h)=>`${h}\n\n数字で見る「${t}で結果が出やすいパターン」\n\n①発信頻度：週7回以上が最も収益化率が高い（週2以下の5倍）\n②特化度：1テーマに絞ったアカウントのERは複数テーマの2.5倍\n③継続期間：6ヶ月継続した人の月収中央値は3ヶ月以内にやめた人の8倍\n④投稿時間：12:00と21:00がエンゲージメント最高値\n⑤ハッシュタグ：X は1〜2個、Instagram は5〜15個が最適`,
+    pro:(t,h)=>`${h}\n\n成果につながった行動と無駄だった行動を整理しました。\n\n■成果に直結した行動（上位5つ）\n1.特定ジャンルへの完全特化\n2.発信頻度より発信品質の追求\n3.数値目標より行動目標の設定\n4.競合分析より顧客理解の深化\n5.成功パターンの徹底的な言語化\n\n■コストパフォーマンスが低かった行動\n1.複数チャネルの同時展開\n2.ツールの最適化への過剰投資\n3.情報収集だけに費やした時間`,
+  },
+  opinion:{
+    honest:(t,h)=>`${h}\n\n「${t}は才能や運の問題」という話をよく聞くけど私は違うと思っています。\n\n3年間見てきた感覚では、結果の差の9割は「仕組みの設計」の差です。\n\n才能がある人が有利なのは最初の3ヶ月だけ。それ以降は継続できる仕組みを作った人が勝つ。\n\n「自分には向いていない」と諦める前に、まず仕組みを疑ってほしいと思います。`,
+    casual:(t,h)=>`${h}\n\n「${t}って結局センスある人だけが稼げるんでしょ？」\nこれ完全に間違いだと思ってます。\n\nセンスより大事なのは「継続できる仕組み」と「正しい方向性」だけ。\n\n私自身、最初はセンスなんて全くなかった。でも仕組みを作ったら動き始めた。\n「才能ない」と思ってる人ほど実はまだ仕組みを作れていないだけだと思います。`,
+    moti:(t,h)=>`${h}\n\n「才能がない」という言葉を言い訳にした瞬間、思考が止まる。\n私はそれに気づいてから変わりました。\n\n${t}で結果が出ない理由は才能じゃない。\nやり方と継続できる環境と諦めないメンタルの問題だ。\n\nその3つが揃えば才能は後からついてくる。\n「才能がない」じゃなくて「まだ正しい方法を見つけていない」。そう言い換えるだけで行動が変わります。`,
+    data:(t,h)=>`${h}\n\n感覚論ではなくデータで話します。\n\n${t}で収益を得ている人のうち「自分はセンスがある」と思っていた人の割合：約23%。\n「最初は自分にはできないと思っていた」と答えた人の割合：約71%。\n\nつまり感じているセンスの有無と実際の成果の間に相関はほぼありません。\n\n相関があったのは「発信の継続期間」と「特定ジャンルへの集中度」。この2つだけです。`,
+    pro:(t,h)=>`${h}\n\n${t}の成否を分けるのはスキルや才能ではなく「戦略の設計精度」です。\n\n特に重要なのは3点——対象読者の解像度、価値提供の一貫性、収益モデルとの連動設計。\n\nこの3つが揃っていれば平均的なスキルでも再現性のある収益を作ることができます。逆に言えばこの3点なしにどれだけスキルを磨いても結果は安定しません。`,
+  },
+  ba:{
+    honest:(t,h)=>`${h}\n\n1年前の自分と今の自分を比べると変わったことがあります。\n\n【1年前】\n・${t}に興味はあるけど何から始めればいいかわからない\n・「自分みたいな普通の人間には無理」と思っていた\n・「いつか始める」が口癖だった\n\n【今】\n・${t}からの副収入が生活費の一部をカバーするようになった\n・失敗を恥ずかしいと思わなくなった\n\n変わったきっかけは「とにかく試す」という姿勢だけでした。`,
+    casual:(t,h)=>`${h}\n\n1年前の私を見せたいくらい変わった笑\n\n▼1年前\n・${t}に興味あるけど怖くて動けない\n・「私みたいな人間には絶対無理」って思ってた\n・成功してる人を見て遠い世界の話だと思ってた\n\n▼今\n・副業収入が普通に発生するようになった\n・失敗するのが怖くなくなった\n・同じ目標の仲間ができた\n\n変えたのは「行動するタイミング」だけ。それだけ。`,
+    moti:(t,h)=>`${h}\n\n1年前と今の自分、同じ人間だとは思えない。\n\n【1年前】\n・${t}への憧れと「でも自分には…」という諦め\n・情報収集ばかりして一歩も動けていなかった\n\n【今】\n・${t}から副収入が発生している現実\n・失敗を楽しめるようになった\n・「諦めなければ誰でも変われる」という確信\n\n変わったのは才能じゃない。動き出したこと、それだけです。`,
+    data:(t,h)=>`${h}\n\n数字で振り返る、私の${t}の6ヶ月。\n\n1ヶ月目：投稿23回 / 反応12件 / 収益0円\n3ヶ月目：投稿68回 / 反応340件 / 収益8,000円\n6ヶ月目：投稿112回 / 反応1,800件 / 収益47,000円\n\n成長は直線ではなく3ヶ月目から急角度になる。\n最初の3ヶ月のゼロ期間を乗り越えられるかが全てを決める。`,
+    pro:(t,h)=>`${h}\n\n取り組み前後の変化を整理しました。\n\n◆Before\n・${t}の全体像が把握できていなかった\n・情報収集と準備に時間をかけすぎていた\n\n◆After（6ヶ月後）\n・収益が安定的に発生する仕組みが構築できた\n・失敗を設計に組み込む思考が身についた\n\n最も大きな変化は「行動前提の思考」への転換です。`,
+  },
+  mistake:{
+    honest:(t,h)=>`${h}\n\n私がやらかした失敗を正直に書きます。\n\n❌失敗①「最初から完璧を目指した」\n質にこだわりすぎて投稿数が週1本。量がなければ質を磨く素材も生まれない。\n\n❌失敗②「情報収集だけを続けた」\n情報収集に3ヶ月費やして実践ゼロ。情報は行動しながら取りに行くもの。\n\n❌失敗③「数字が伸びないとやめたくなった」\n3ヶ月目まで数字が伸びないのは普通のこと。それを知らなかった私は何度もやめそうになった。`,
+    casual:(t,h)=>`${h}\n\n黒歴史を晒します笑\n\n失敗1：「準備ができてから始めよう」を繰り返して半年スタートを遅らせた。完璧な準備なんて始めるまで永遠にできない。\n\n失敗2：稼げる方法を片っ端から試して全部中途半端に終わった。1つのことをしっかりやればよかった。\n\n失敗3：「伸びないのは自分がダメだから」と思い込んだ。違う。やり方の問題だった。\n\n同じ失敗をしてほしくなくて書きました。`,
+    moti:(t,h)=>`${h}\n\n失敗から学んだことを全部話します。\n\n❌「まず勉強してから始めよう」 → 始めないと学べないことが9割ある\n❌「うまくいってる人を全部真似しよう」 → 前提条件が違いすぎる\n❌「フォロワーが増えれば稼げる」 → 間違い。少人数でも信頼があれば稼げる\n❌「継続できない自分が悪い」 → 継続できないのは意志の問題じゃなくて仕組みの問題\n\n同じ失敗を繰り返さないために、メモしておいてください。`,
+    data:(t,h)=>`${h}\n\n${t}でよくある失敗パターンのデータです。\n\n継続できなかった理由（複数回答）\n・「結果が出る前に諦めた」：67%\n・「正しい方法がわからなかった」：54%\n・「時間が確保できなかった」：41%\n・「モチベーションが続かなかった」：38%\n\n結論：失敗の7割は「方法」か「期待値の設定」の問題。\n正しい方法で3ヶ月継続できれば大半の失敗は回避できます。`,
+    pro:(t,h)=>`${h}\n\n避けるべき代表的な失敗パターンを整理しました。\n\n■戦略レベルの失敗\n・ターゲット設定が曖昧なまま発信を始める\n・収益モデルが明確でない状態でフォロワー獲得を目指す\n\n■実行レベルの失敗\n・インプットとアウトプットの比率が偏る\n・成果指標を設定せずに継続・撤退の判断ができない\n\n■心理レベルの失敗\n・短期間での成果を期待しすぎる\n・他者と状況を比較して行動の質が落ちる`,
+  },
+  number:{
+    honest:(t,h)=>`${h}\n\n数字で正直に話します。\n\n・始めるまでにかかった「考えていた時間」：約8ヶ月\n・実際に始めてから最初の収益が出るまで：約73日\n・投資した時間（累計）：週3〜4時間×6ヶ月\n・6ヶ月後の月収：約4.2万円\n\n振り返ると「始めるまでの8ヶ月」が最大の損失でした。考えている時間=機会損失。始めた人だけが続けることも諦めることも選べます。`,
+    casual:(t,h)=>`${h}\n\n数字だけ並べてみます。\n\n1ヶ月目：フォロワー+23人、収益0円\n2ヶ月目：フォロワー+67人、収益0円\n3ヶ月目：フォロワー+110人、収益2,800円\n4ヶ月目：フォロワー+180人、収益12,000円\n5ヶ月目：フォロワー+290人、収益28,000円\n6ヶ月目：フォロワー+420人、収益51,000円\n\n3ヶ月目まで収益ゼロだったので何度かやめようと思いました。数字が動き始めてからは想像より早かったです。`,
+    moti:(t,h)=>`${h}\n\n数字で語ります。感情抜き。\n\n最初の3ヶ月：売上、ほぼゼロ。\n「3ヶ月続けられない人」と「続けた人」の6ヶ月後の月収差：約6倍。\n\nこれは才能の差じゃない。「諦めたか、続けたか」の差だけです。\n数字はウソをつかない。続けた人間が勝つ。`,
+    data:(t,h)=>`${h}\n\n${t}の収益化に関する実データを共有します。\n\n■初月収益発生までの平均期間：87日\n■月収5万円突破までの平均期間：8.3ヶ月\n■月収10万円突破までの平均期間：13.7ヶ月\n\n■収益化に成功した人の共通点\n・特定テーマへの特化：91%\n・週4回以上の発信：78%\n・3ヶ月以上の継続：100%\n\n結論：特化×継続×週4発信が最もシンプルな公式です。`,
+    pro:(t,h)=>`${h}\n\n収益化プロセスを数値で整理しました。\n\n◆フェーズ1（0〜90日）：実績構築期\n目標KPI：週5回以上発信継続 / 収益期待値：0〜3万円\n\n◆フェーズ2（91〜180日）：信頼構築期\n目標KPI：エンゲージメント率3%超 / 収益期待値：3〜10万円\n\n◆フェーズ3（181日〜）：収益最大化期\n目標KPI：LTV設計・自動化比率40%以上 / 収益期待値：10〜30万円`,
+  },
+};
+
+// DM CTA templates per phase and strength
+function getDMCTA(intent) {
+  const phase = cfg.phase || 'seed';
+  const pd = PHASES[phase];
+  const gift = cfg.gift || '限定情報';
+  const dmNote = cfg.line ? `\n→ ${cfg.line}` : '\n→ プロフィールからDMをどうぞ📩';
+  const isDMPost = intent === 'li';
+
+  if (phase === 'seed') {
+    return isDMPost
+      ? `プロフィールのDMからお気軽にご連絡ください。詳しい内容をお伝えします📩`
+      : `詳しい内容はプロフィールのDMでいつでもお気軽に🙏`;
+  }
+  if (phase === 'grow') {
+    const opts = [
+      `DMしてくれた方に【${gift}】を無料でプレゼント中🎁${dmNote}`,
+      `【DM限定】【${gift}】をプレゼントしています📩 プロフィールからDMをどうぞ！`,
+      `【${gift}】をDMで無料プレゼント中📲 プロフィールからお気軽にDMしてください✅`,
+    ];
+    return opts[Math.floor(Math.random() * opts.length)];
+  }
+  if (phase === 'engage') {
+    const opts = [
+      `【DMで無料プレゼント🎁】今すぐプロフィールからDMしてください！\n【${gift}】をお送りします。すでに〇〇人にお届け済み！`,
+      `DMで無料相談受付中📩 先着〇名限定→プロフィールから今すぐDMを✅\n【${gift}】もプレゼントしています！`,
+      `【DM限定】【${gift}】を無料公開中📲 プロフィールからDMしてくれた方にお届けします！`,
+    ];
+    return opts[Math.floor(Math.random() * opts.length)];
+  }
+  // monetize
+  const opts = [
+    `【DM限定募集中📩】残り〇席です！今すぐプロフィールからDMをどうぞ！\nお見逃しなく✅`,
+    `【DM先行案内中🎯】無料相談をDMで受付中\n先着〇名様限定→今すぐプロフィールからDMしてください✅`,
+    `今回の募集はDM限定の先行案内のみ📲\nプロフィールからDMしてくれた方に詳細をお送りします！お見逃しなく！`,
+  ];
+  return opts[Math.floor(Math.random() * opts.length)];
+}
+
+function pickRand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function buildText(plat, theme, fmt, hookKey, intent, tone) {
+  const hookBank = HOOKS[hookKey] || HOOKS.shock;
+  const hook = pickRand(hookBank)(theme);
+  const fmtMap = FMTS[fmt] || FMTS.tips;
+  const bodyFn = fmtMap[tone] || fmtMap.honest;
+  const body = bodyFn(theme, hook);
+  const cta = getDMCTA(intent);
+  const genre = cfg.genre || '副業';
+
+  if (plat === 'x') {
+    const tags = getXTags(genre);
+    let text = body + '\n\n' + cta + '\n\n' + tags;
+    return text.length > 275 ? text.substring(0,272) + '…' : text;
+  }
+  if (plat === 'ig') {
+    const tags = getIGTags(genre);
+    return body + '\n\n' + cta + '\n\n保存して後で活用してね💾\n\n' + tags;
+  }
+  // threads
+  let text = body + '\n\n' + cta;
+  return text.length > 492 ? text.substring(0,489) + '…' : text;
+}
+
+// Tags
+const TAGS = {
+  '副業': {x:['副業','ビジネス','収入アップ'], ig:['副業','副業初心者','収入アップ','在宅ワーク','フリーランス','副業で稼ぐ','月10万','スキルアップ','ビジネス','お金の勉強','SNS副業','コンテンツビジネス','個人ビジネス','副業ブログ','自由な働き方']},
+  'AI':   {x:['ChatGPT','AI活用','DX'], ig:['ChatGPT','AI活用','AI副業','プロンプト','テクノロジー','デジタルスキル','仕事効率化','AI初心者','未来の働き方','DX推進','生成AI','ChatGPT活用']},
+  '投資': {x:['新NISA','投資初心者','資産形成'], ig:['新NISA','投資初心者','資産運用','つみたてNISA','インデックス投資','お金の勉強','FIRE','長期投資','複利','資産形成','株式投資','経済的自由']},
+};
+const DEF_TAGS = {x:['ビジネス','稼ぐ','副業'], ig:['ビジネス','副業','自己啓発','成長','スキルアップ','働き方改革','収入','学び','挑戦','マインドセット','自己成長','副業初心者']};
+function tagsFor(genre, p) {
+  for (const k of ['副業','AI','投資']) { if (genre.includes(k)) return (TAGS[k]||{})[p] || DEF_TAGS[p]; }
+  return DEF_TAGS[p] || [];
+}
+function getXTags(g) { return tagsFor(g,'x').slice(0,2).map(t=>'#'+t).join(' '); }
+function getIGTags(g) { return tagsFor(g,'ig').sort(()=>Math.random()-.5).slice(0,12).map(t=>'#'+t).join(' '); }
+
+// ══════════════════════════════
+//  WEEK PLAN
+// ══════════════════════════════
+const DAYS = ['月曜日','火曜日','水曜日','木曜日','金曜日','土曜日','日曜日'];
+const FMT_KEYS  = ['tips','story','list','opinion','ba','mistake','number'];
+const HOOK_KEYS = ['shock','number','secret','empathy','question','contrast'];
+
+async function genWeek() {
+  if (!cfg.genre) { toast('先にアカウント設定を完了してください','err'); goTab(document.querySelector('[data-pg=setup]')); return; }
+  const theme  = document.getElementById('w-theme').value.trim();
+  const cnt    = parseInt(document.getElementById('w-cnt').value);
+  const plats  = cfg.platforms || ['x','ig','th'];
+  const phase  = cfg.phase || 'seed';
+  const pd     = PHASES[phase];
+  const tone   = cfg.tone || 'honest';
+  const genre  = cfg.genre;
+
+  const ld = document.getElementById('w-ld'), pw = document.getElementById('w-pw'), pb = document.getElementById('w-pb');
+  ld.classList.add('on'); pw.style.display = 'block';
+  document.getElementById('w-out').style.display = 'none';
+
+  const msgs = ['フェーズを分析中…','週間戦略を設計中…','投稿タイプを割り当て中…','DM CTAを最適化中…','ハッシュタグを選定中…'];
+  let mi=0,pv=0;
+  const pi = setInterval(()=>{pv=Math.min(pv+Math.random()*18,90);pb.style.width=pv+'%';},260);
+  const mt = setInterval(()=>{document.getElementById('w-msg').textContent=msgs[mi++%msgs.length];},600);
+  await new Promise(r=>setTimeout(r,2200));
+  clearInterval(pi); clearInterval(mt); pb.style.width = '100%';
+
+  wdata = [];
+  const ppd = Math.max(1, Math.round(cnt / 7));
+
+  for (let d = 0; d < 7; d++) {
+    const dayPlan = pd.plan[d];
+    const dayTheme = theme || `${genre}：${dayPlan.focus}`;
+    const posts = [];
+    for (let i = 0; i < ppd; i++) {
+      const plat    = plats[(d * ppd + i) % plats.length];
+      const fmt     = FMT_KEYS[(d + i * 3) % FMT_KEYS.length];
+      const hookKey = HOOK_KEYS[(d * 2 + i) % HOOK_KEYS.length];
+      const text    = buildText(plat, dayTheme, fmt, hookKey, dayPlan.intent, tone);
+      posts.push({ plat, text, fmt, intent: dayPlan.intent });
+    }
+    wdata.push({ day: DAYS[d], intent: dayPlan.intent, focus: dayPlan.focus, theme: dayTheme, posts });
+  }
+
+  renderWeekGrid();
+
+  const tip = document.getElementById('w-tip');
+  tip.innerHTML = `<strong>📌 ${pd.name}の週間戦略：</strong>${pd.tip}`;
+
+  ld.classList.remove('on');
+  setTimeout(()=>{pw.style.display='none';pb.style.width='0';},400);
+  document.getElementById('w-out').style.display = 'block';
+  toast('1週間分のプランを生成しました ✓');
+}
+
+function renderWeekGrid() {
+  document.getElementById('w-grid').innerHTML = wdata.map((day,di) => {
+    const im = INTENT[day.intent] || INTENT.aw;
+    const postsHtml = day.posts.map((p,pi) => {
+      const isDM = p.text.includes('DM') || p.text.includes('プロフィール');
+      const tags = p.plat==='ig'
+        ? tagsFor(cfg.genre||'副業','ig').sort(()=>Math.random()-.5).slice(0,8).map(t=>'#'+t)
+        : tagsFor(cfg.genre||'副業','x').slice(0,2).map(t=>'#'+t);
+      return `
+        <div class="pitem">
+          <div class="pihead">
+            <div class="piplat pi${p.plat}">${PL[p.plat]?.name||p.plat}</div>
+            <div class="pitags">
+              <span class="pitag">${p.fmt}</span>
+              ${isDM?'<span class="pitag line-tag">DM誘導</span>':''}
+            </div>
+          </div>
+          <div class="ptext" id="pt-${di}-${pi}">${p.text}</div>
+          <div class="htrow">${tags.map(t=>`<div class="htg ht${p.plat}" onclick="cpTag('${t}')">${t}</div>`).join('')}</div>
+          <div class="pactions" style="margin-top:7px">
+            <button class="cpbtn" id="cpb-${di}-${pi}" onclick="cpPost(${di},${pi})">📋 コピー</button>
+            <button class="cpbtn" onclick="regenPost(${di},${pi})">🔄 再生成</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="dcard" style="animation-delay:${di*.05}s">
+        <div class="dhead" onclick="toggleDay(${di})">
+          <div class="dlabel">${day.day}</div>
+          <div class="dmeta">
+            <span class="dintent ${im.css}">${im.label}</span>
+            <span class="dfocus">${day.focus}</span>
+            <span id="darr-${di}" style="font-family:var(--fm);font-size:10px;color:var(--t2)">▾</span>
+          </div>
+        </div>
+        <div class="dbody" id="db-${di}">${postsHtml}</div>
+      </div>`;
+  }).join('');
+}
+
+function toggleDay(di) {
+  const el = document.getElementById('db-'+di);
+  const ar = document.getElementById('darr-'+di);
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : 'flex';
+  ar.textContent = open ? '▾' : '▴';
+}
+
+function cpPost(di, pi) {
+  const t = document.getElementById(`pt-${di}-${pi}`)?.textContent;
+  if (!t) return;
+  navigator.clipboard.writeText(t).then(()=>{
+    const btn = document.getElementById(`cpb-${di}-${pi}`);
+    btn.textContent='✓ コピー済み'; btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='📋 コピー';btn.classList.remove('done');},2200);
+    toast('コピーしました','cp');
+  });
+}
+
+async function regenPost(di, pi) {
+  const day = wdata[di]; const p = day.posts[pi];
+  const fmt  = FMT_KEYS[Math.floor(Math.random()*FMT_KEYS.length)];
+  const hook = HOOK_KEYS[Math.floor(Math.random()*HOOK_KEYS.length)];
+  const text = buildText(p.plat, day.theme, fmt, hook, day.intent, cfg.tone||'honest');
+  wdata[di].posts[pi].text = text; wdata[di].posts[pi].fmt = fmt;
+  const el = document.getElementById(`pt-${di}-${pi}`);
+  if (el) el.textContent = text;
+  toast('再生成しました ✓');
+}
+
+function cpTag(t) { navigator.clipboard.writeText(t).then(()=>toast(`${t} をコピー`,'cp')); }
+
+function copyWeekAll() {
+  if (!wdata.length) return toast('先にプランを生成してください','err');
+  const text = wdata.map(d=>`━━━ ${d.day}（${d.focus}）━━━\n`+
+    d.posts.map(p=>`[${PL[p.plat]?.name}]\n${p.text}`).join('\n\n')).join('\n\n');
+  navigator.clipboard.writeText(text).then(()=>toast('週間プランを全件コピーしました 📋','cp'));
+}
+
+function saveWeek() {
+  if (!wdata.length) return toast('先にプランを生成してください','err');
+  const e = {
+    id:Date.now(), type:'week',
+    title:`週間プラン — ${cfg.genre||'副業'}（${PHASES[cfg.phase||'seed'].name}）`,
+    phase:cfg.phase, data:wdata,
+    date:new Date().toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}),
+  };
+  saved.unshift(e);
+  if (saved.length>30) saved=saved.slice(0,30);
+  localStorage.setItem(DBKEY,JSON.stringify(saved));
+  updateHcnt(); renderHistory(); toast('保存しました 💾');
+}
+
+// ══════════════════════════════
+//  SINGLE
+// ══════════════════════════════
+async function genSingle() {
+  const theme = document.getElementById('g-theme').value.trim();
+  if (!theme) return toast('テーマを入力してください','err');
+  const type  = document.getElementById('g-type').value;
+  const fmt   = document.getElementById('g-fmt').value;
+  const platV = document.getElementById('g-plat').value;
+  const tone  = cfg.tone || 'honest';
+  const plats = platV==='all' ? (cfg.platforms||['x','ig','th']) : [platV];
+  const intentMap = {awareness:'aw',engage:'en',line:'li',trend:'tr'};
+  const intent = intentMap[type] || 'aw';
+  const hookKey = HOOK_KEYS[Math.floor(Math.random()*HOOK_KEYS.length)];
+
+  document.getElementById('g-ld').classList.add('on');
+  document.getElementById('g-out').style.display = 'none';
+  await new Promise(r=>setTimeout(r,800));
+
+  const posts = plats.map(p => ({
+    plat:p, text:buildText(p, theme, fmt, hookKey, intent, tone)
+  }));
+  window._sgPosts = posts; window._sgPlats = plats;
+
+  const out = document.getElementById('g-out');
+  const cols = plats.length===1?'1fr':plats.length===2?'1fr 1fr':'1fr 1fr 1fr';
+  out.innerHTML = `
+    <div class="card">
+      <div class="chtitle">生成された投稿文 — 編集後にコピー</div>
+      <div class="outgrid" style="grid-template-columns:${cols}">
+        ${posts.map((p,i)=>{
+          const pl = PL[p.plat]; const lim = pl.limit;
+          const len = p.text.length;
+          const cc = len>lim?' ov':len>lim*.88?' w':'';
+          return `
+            <div class="obox">
+              <div class="obhead">
+                <div class="oname ${pl.ocls}">${pl.name}</div>
+                <button class="btn btn-g btn-sm" onclick="regenSingleOne(${i})">再生成</button>
+              </div>
+              <textarea id="sg-${i}" oninput="sgCC(${i},${lim})" style="min-height:185px;font-size:12px;line-height:1.78">${p.text}</textarea>
+              <div class="ofoot">
+                <div class="ccount${cc}" id="sgc-${i}">${len} / ${lim}</div>
+                <button class="cpbtn" id="sgb-${i}" onclick="sgCopy(${i},'${p.plat}')">📋 コピー</button>
+              </div>
+            </div>`;
+        }).join('')}
+      </div>
+      <div class="abar">
+        <button class="btn btn-y" onclick="sgCopyAll()">📋 全SNSまとめてコピー</button>
+        <button class="btn btn-g" onclick="genSingle()">🔄 再生成</button>
+        <button class="btn btn-te" onclick="sgSave()">💾 保存</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="chtitle">ハッシュタグ（クリックでコピー）</div>
+      ${plats.map(p=>{
+        const tags = p==='ig'
+          ? tagsFor(cfg.genre||'副業','ig').sort(()=>Math.random()-.5).slice(0,12).map(t=>'#'+t)
+          : tagsFor(cfg.genre||'副業','x').slice(0,3).map(t=>'#'+t);
+        return `
+          <div style="margin-bottom:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+              <div class="slbl" style="margin:0;color:${p==='x'?'var(--xc)':p==='ig'?'var(--ic)':'var(--tc)'}">${PL[p].name}</div>
+              <button class="cpbtn btn-sm" onclick="navigator.clipboard.writeText('${tags.join(' ')}').then(()=>toast('タグをコピーしました','cp'))">全コピー</button>
+            </div>
+            <div class="htrow">${tags.map(t=>`<div class="htg ht${p}" onclick="cpTag('${t}')">${t}</div>`).join('')}</div>
+          </div>`;
+      }).join('')}
+    </div>`;
+
+  document.getElementById('g-ld').classList.remove('on');
+  out.style.display = 'block';
+  toast('投稿文を生成しました ✓');
+}
+
+function sgCC(i,lim){const v=document.getElementById('sg-'+i)?.value||'';const len=v.length;const el=document.getElementById('sgc-'+i);if(el){el.textContent=`${len} / ${lim}`;el.className='ccount'+(len>lim?' ov':len>lim*.88?' w':'');}}
+
+async function regenSingleOne(i){
+  const theme=document.getElementById('g-theme').value||(cfg.genre||'副業');
+  const fmt=FMT_KEYS[Math.floor(Math.random()*FMT_KEYS.length)];
+  const hook=HOOK_KEYS[Math.floor(Math.random()*HOOK_KEYS.length)];
+  const plat=(window._sgPlats||['x'])[i]||'x';
+  const type=document.getElementById('g-type').value;
+  const intentMap={awareness:'aw',engage:'en',line:'li',trend:'tr'};
+  const intent=intentMap[type]||'aw';
+  const text=buildText(plat,theme,fmt,hook,intent,cfg.tone||'honest');
+  const ta=document.getElementById('sg-'+i);if(ta){ta.value=text;sgCC(i,PL[plat].limit);}
+  toast('再生成しました ✓');
+}
+
+function sgCopy(i,plat){
+  const t=document.getElementById('sg-'+i)?.value;if(!t)return;
+  navigator.clipboard.writeText(t).then(()=>{
+    const btn=document.getElementById('sgb-'+i);
+    btn.textContent='✓ コピー済み';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='📋 コピー';btn.classList.remove('done');},2200);
+    toast(`${PL[plat]?.name}をコピーしました`,'cp');
+  });
+}
+
+function sgCopyAll(){
+  const plats=window._sgPlats||[];
+  const text=plats.map((p,i)=>`━━ ${PL[p]?.name} ━━\n${document.getElementById('sg-'+i)?.value||''}`).join('\n\n');
+  navigator.clipboard.writeText(text).then(()=>toast('全SNSをコピーしました','cp'));
+}
+
+function sgSave(){
+  const theme=document.getElementById('g-theme').value||(cfg.genre||'副業');
+  const plats=window._sgPlats||[];
+  const posts={};plats.forEach((p,i)=>{posts[p]=document.getElementById('sg-'+i)?.value||'';});
+  const e={id:Date.now(),type:'single',title:theme,plats,posts,
+    date:new Date().toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})};
+  saved.unshift(e);if(saved.length>50)saved=saved.slice(0,50);
+  localStorage.setItem(DBKEY,JSON.stringify(saved));
+  updateHcnt();renderHistory();toast('保存しました 💾');
+}
+
+// ══════════════════════════════
+//  HISTORY
+// ══════════════════════════════
+function updateHcnt(){document.getElementById('hcnt').textContent=saved.length;}
+
+function renderHistory(){
+  const el=document.getElementById('hist');
+  if(!saved.length){el.innerHTML='<div class="empty">まだ保存した投稿・プランはありません<br>生成後に「保存」ボタンを押してください</div>';return;}
+  el.innerHTML=saved.map((e,i)=>{
+    const pb=(e.plats||[]).map(p=>`<span style="font-family:var(--fm);font-size:9px;padding:2px 5px;border-radius:3px;background:rgba(255,255,255,.04);color:var(--t1)">${PL[p]?.short||p.toUpperCase()}</span>`).join('');
+    const prev=e.type==='week'?`週間プラン (${e.data?.length||7}日分)`:Object.values(e.posts||{})[0]?.substring(0,70).replace(/\n/g,' ')||'';
+    return `
+      <div class="hitem" id="hi-${i}">
+        <div class="hitem-h">
+          <div class="htitle">${e.title}</div>
+          <div class="hmeta">
+            <div style="display:flex;gap:3px">${pb}</div>
+            ${e.type==='week'?`<span style="font-family:var(--fm);font-size:9px;padding:2px 5px;border-radius:3px;background:rgba(200,255,92,.08);color:var(--lime)">週間</span>`:''}
+            <div class="hdate">${e.date}</div>
+            <button class="cpbtn btn-sm" onclick="toggleH(${i})">展開</button>
+            <button class="cpbtn btn-sm" style="border-color:rgba(255,77,109,.2);color:var(--re)" onclick="delH(${i})">削除</button>
+          </div>
+        </div>
+        <div class="hprev">${prev}…</div>
+        <div class="hexp" id="he-${i}">
+          ${e.type==='week'?renderWeekH(e):renderSingleH(e)}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderSingleH(e){
+  return Object.entries(e.posts||{}).map(([p,t])=>`
+    <div class="hpblock">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="piplat pi${p}" style="font-size:11px;font-family:var(--fh);font-weight:800">${PL[p]?.name||p}</div>
+        <button class="cpbtn btn-sm" onclick="navigator.clipboard.writeText(${JSON.stringify(t)}).then(()=>toast('コピーしました','cp'))">📋 コピー</button>
+      </div>
+      <div class="hptext">${t}</div>
+    </div>`).join('')+
+  `<div style="display:flex;gap:7px;margin-top:8px">
+    <button class="btn btn-y btn-sm" onclick="loadSH(${JSON.stringify(e).replace(/"/g,'&quot;')})">編集画面で開く</button>
+    <button class="btn btn-g btn-sm" onclick="cpSH(${JSON.stringify(e).replace(/"/g,'&quot;')})">全件コピー</button>
+  </div>`;
+}
+
+function renderWeekH(e){
+  return (e.data||[]).slice(0,3).map(d=>`
+    <div style="background:var(--s4);border:1px solid var(--b0);border-radius:var(--rr);padding:9px 11px;margin-bottom:7px">
+      <div style="font-family:var(--fh);font-size:12px;font-weight:700;color:#fff;margin-bottom:5px">${d.day} — ${d.focus}</div>
+      ${d.posts.slice(0,1).map(p=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+          <span class="piplat pi${p.plat}" style="font-size:10px">${PL[p.plat]?.name||p.plat}</span>
+          <button class="cpbtn btn-sm" onclick="navigator.clipboard.writeText(${JSON.stringify(p.text)}).then(()=>toast('コピーしました','cp'))">📋</button>
+        </div>
+        <div style="font-size:11px;color:var(--t1);line-height:1.7;white-space:pre-wrap">${p.text.substring(0,100)}…</div>`).join('')}
+    </div>`).join('')+
+  `<button class="btn btn-g btn-sm" style="margin-top:6px" onclick="cpWH(${JSON.stringify(e).replace(/"/g,'&quot;')})">📋 週間プランを全件コピー</button>`;
+}
+
+function toggleH(i){document.getElementById('he-'+i).classList.toggle('on');}
+function delH(i){saved.splice(i,1);localStorage.setItem(DBKEY,JSON.stringify(saved));updateHcnt();renderHistory();toast('削除しました');}
+function clearAll(){if(!saved.length)return toast('保存データがありません','err');if(!confirm(`${saved.length}件を全削除しますか？`))return;saved=[];localStorage.setItem(DBKEY,JSON.stringify(saved));updateHcnt();renderHistory();toast('全削除しました');}
+function exportAll(){if(!saved.length)return toast('保存データがありません','err');const t=saved.map((e,i)=>{const c=e.type==='week'?(e.data||[]).map(d=>d.posts.map(p=>`[${PL[p.plat]?.name}]\n${p.text}`).join('\n\n')).join('\n\n'):Object.entries(e.posts||{}).map(([p,t])=>`[${PL[p]?.name||p}]\n${t}`).join('\n\n');return`■${i+1}. ${e.title} (${e.date})\n${c}`;}).join('\n\n'+'─'.repeat(36)+'\n\n');navigator.clipboard.writeText(t).then(()=>toast(`${saved.length}件をエクスポートしました`,'cp'));}
+function loadSH(e){document.getElementById('g-theme').value=e.title;goTab(document.querySelector('[data-pg=single]'));}
+function cpSH(e){const t=Object.entries(e.posts||{}).map(([p,tx])=>`━━ ${PL[p]?.name||p} ━━\n${tx}`).join('\n\n');navigator.clipboard.writeText(t).then(()=>toast('全件コピーしました','cp'));}
+function cpWH(e){const t=(e.data||[]).map(d=>`━━━ ${d.day} ━━━\n`+d.posts.map(p=>`[${PL[p.plat]?.name}]\n${p.text}`).join('\n\n')).join('\n\n');navigator.clipboard.writeText(t).then(()=>toast('週間プランをコピーしました','cp'));}
+
+// ══════════════════════════════════════
+//  API STATUS
+// ══════════════════════════════════════
+function apiDot(ok) {
+  const dot = document.getElementById('api-dot');
+  const lbl = document.getElementById('api-lbl');
+  if (!dot) return;
+  if (ok === true)  { dot.style.background='var(--lime)'; dot.style.boxShadow='0 0 6px rgba(200,255,92,.6)'; lbl.textContent='API接続済み'; lbl.style.color='var(--lime)'; }
+  else if (ok===false){ dot.style.background='#ff4d6d'; dot.style.boxShadow='none'; lbl.textContent='API接続エラー'; lbl.style.color='#ff4d6d'; }
+  else { dot.style.background='var(--t2)'; dot.style.boxShadow='none'; lbl.textContent='API未接続'; lbl.style.color='var(--t1)'; }
+}
+
+// ══════════════════════════════════════
+//  SHARED CACHE for trend data
+// ══════════════════════════════════════
+let _cachedTweets = [];
+
+// ══════════════════════════════════════
+//  TREND COLLECTION + AI ANALYSIS
+// ══════════════════════════════════════
+async function doTrend() {
+  const q   = document.getElementById('tr-q').value.trim() || '副業';
+  const max = document.getElementById('tr-max').value;
+  const ld  = document.getElementById('tr-ld');
+  const err = document.getElementById('tr-err');
+  const out = document.getElementById('tr-insight');
+
+  ld.classList.add('on'); err.style.display='none'; out.style.display='none';
+
+  const msgs = [`「${q}」のバズ投稿を収集中…`, 'エンゲージメントを集計中…', 'AIがパターンを分析中…', 'トレンドキーワードを抽出中…'];
+  let mi=0;
+  const mt = setInterval(()=>{ document.getElementById('tr-msg').textContent=msgs[mi++%msgs.length]; }, 800);
+
+  try {
+    // 1. X APIでバズ投稿収集
+    const xRes = await fetch(`/api/x?type=search&q=${encodeURIComponent(q)}&max=${max}`);
+    const xData = await xRes.json();
+    if (!xRes.ok || xData.error) throw new Error(xData.error || 'X API接続エラー');
+    if (!xData.tweets?.length) throw new Error('該当する投稿が見つかりませんでした');
+    _cachedTweets = xData.tweets;
+    apiDot(true);
+
+    // 2. Claude AIでパターン分析
+    const aiRes = await fetch('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'analyze_trends',
+        tweets: xData.tweets,
+        genre: cfg.genre || '副業・ビジネス',
+      }),
+    });
+    const aiData = await aiRes.json();
+    if (!aiRes.ok || aiData.error) throw new Error(aiData.error || 'AI分析エラー');
+
+    clearInterval(mt);
+
+    // トレンドキーワード表示
+    document.getElementById('tr-trends').innerHTML = (aiData.trends || []).map(t =>
+      `<span style="font-family:var(--fm);font-size:11px;padding:4px 11px;border-radius:16px;background:rgba(200,255,92,.1);border:1px solid rgba(200,255,92,.2);color:var(--lime);cursor:pointer" onclick="document.getElementById('tr-q').value='${t}'">${t}</span>`
+    ).join('');
+
+    // インサイト
+    document.getElementById('tr-insight-text').innerHTML = `<strong style="color:var(--lime)">💡 AIインサイト：</strong>${aiData.insight || ''}`;
+
+    // パターンカード
+    document.getElementById('tr-patterns').innerHTML = (aiData.patterns || []).map(p => `
+      <div style="background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr2);padding:12px 13px">
+        <div style="font-family:var(--fh);font-size:12px;font-weight:700;color:#fff;margin-bottom:4px">${p.name}</div>
+        <div style="font-size:11px;color:var(--t1);margin-bottom:7px">${p.desc}</div>
+        <div style="font-size:11px;color:var(--lime);background:rgba(200,255,92,.05);border-radius:5px;padding:5px 8px;line-height:1.6">"${p.example}"</div>
+        <button style="margin-top:7px;display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;background:var(--s2);border:1px solid var(--b0);font-family:var(--fh);font-size:10px;font-weight:700;color:var(--t1);cursor:pointer" onclick="usePattern('${p.example.replace(/'/g,'\\'+'\'').substring(0,50)}')">このパターンで生成</button>
+      </div>`).join('');
+
+    // バズ投稿一覧
+    document.getElementById('tr-count').textContent = `${xData.tweets.length}件`;
+    document.getElementById('tr-list').innerHTML = xData.tweets.map((t,i) => `
+      <div style="background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr2);padding:11px 13px;animation:fin .2s ease both;animation-delay:${i*.04}s">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div>
+            <span style="font-family:var(--fh);font-size:11px;font-weight:700;color:#fff">${t.author?.name||'—'}</span>
+            <span style="font-family:var(--fm);font-size:9px;color:var(--t1);margin-left:4px">@${t.author?.username||'—'}</span>
+            ${t.author?.followers?`<span style="font-family:var(--fm);font-size:9px;color:var(--t2);margin-left:6px">👥${t.author.followers.toLocaleString()}</span>`:''}
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span style="font-family:var(--fm);font-size:10px;color:var(--t1)">❤️${t.likes.toLocaleString()} 🔄${t.retweets.toLocaleString()}</span>
+            <span style="font-family:var(--fm);font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(61,255,176,.1);color:var(--lime)">ER ${t.engagement.toLocaleString()}</span>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--tx);line-height:1.75;margin-bottom:6px">${t.text.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>
+        <div style="display:flex;gap:5px">
+          <button style="display:flex;align-items:center;gap:3px;padding:3px 8px;border-radius:5px;background:var(--s2);border:1px solid var(--b0);font-family:var(--fh);font-size:10px;font-weight:700;color:var(--t1);cursor:pointer" onclick="sendToOptimize(${JSON.stringify(t.text)})">✨ AI最適化に送る</button>
+          <button style="display:flex;align-items:center;gap:3px;padding:3px 8px;border-radius:5px;background:var(--s2);border:1px solid var(--b0);font-family:var(--fh);font-size:10px;font-weight:700;color:var(--t1);cursor:pointer" onclick="navigator.clipboard.writeText(${JSON.stringify(t.text)}).then(()=>toast('コピーしました','cp'))">📋 コピー</button>
+          <a href="https://x.com/${t.author?.username||''}" target="_blank" style="display:flex;align-items:center;gap:3px;padding:3px 8px;border-radius:5px;background:var(--s2);border:1px solid var(--b0);font-family:var(--fh);font-size:10px;font-weight:700;color:var(--t1);text-decoration:none">🔗 プロフィール</a>
+        </div>
+      </div>`).join('');
+
+    out.style.display='block';
+    toast(`${xData.tweets.length}件収集 + AIパターン分析完了 ✓`);
+  } catch(e) {
+    clearInterval(mt);
+    err.textContent = e.message;
+    err.style.display='block';
+    if (e.message.includes('X_API') || e.message.includes('API')) apiDot(false);
+  }
+  ld.classList.remove('on');
+}
+
+function sendToOptimize(text) {
+  document.getElementById('opt-draft').value = text;
+  goTab(document.querySelector('[data-pg=optimize]'));
+  toast('AI最適化タブに送りました', 'cp');
+}
+
+function usePattern(example) {
+  document.getElementById('opt-draft').value = example + '\n\n（ここに本文を続けてください）';
+  goTab(document.querySelector('[data-pg=optimize]'));
+}
+
+// ══════════════════════════════════════
+//  AI OPTIMIZE
+// ══════════════════════════════════════
+async function doOptimize() {
+  const draft = document.getElementById('opt-draft').value.trim();
+  if (!draft) return toast('最適化したい投稿文を入力してください', 'err');
+
+  const ld  = document.getElementById('opt-ld');
+  const err = document.getElementById('opt-err');
+  const out = document.getElementById('opt-out');
+  const mode = document.getElementById('opt-mode').value;
+
+  ld.classList.add('on'); err.style.display='none'; out.style.display='none';
+
+  const msgs = ['トレンドを取得中…', 'バズパターンを分析中…', 'AI最適化を適用中…', '仕上げ中…'];
+  let mi=0;
+  const mt = setInterval(()=>{ document.getElementById('opt-msg').textContent=msgs[mi++%msgs.length]; }, 700);
+
+  try {
+    let tweets = _cachedTweets;
+
+    // キャッシュがない or 最新取得モードの場合は自動取得
+    if (!tweets.length || mode === 'latest') {
+      const q = cfg.genre || '副業';
+      const xRes = await fetch(`/api/x?type=search&q=${encodeURIComponent(q)}&max=5`);
+      const xData = await xRes.json();
+      if (xData.tweets?.length) {
+        tweets = xData.tweets;
+        _cachedTweets = tweets;
+        apiDot(true);
+      }
+    }
+
+    const aiRes = await fetch('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'optimize_post',
+        draft,
+        tweets,
+        genre: cfg.genre || '副業・ビジネス',
+        tone: cfg.tone || 'honest',
+        offer: cfg.gift || '',
+        flw: cfg.flw || 0,
+      }),
+    });
+    const aiData = await aiRes.json();
+    if (!aiRes.ok || aiData.error) throw new Error(aiData.error || 'AI最適化エラー');
+
+    clearInterval(mt);
+
+    const optimized = aiData.text || '';
+    document.getElementById('opt-before').textContent = draft;
+    const ta = document.getElementById('opt-after');
+    ta.value = optimized;
+    ta.addEventListener('input', updateOptCount);
+    updateOptCount();
+
+    out.style.display='block';
+    toast('AI最適化完了 ✨');
+  } catch(e) {
+    clearInterval(mt);
+    err.textContent = e.message;
+    err.style.display='block';
+  }
+  ld.classList.remove('on');
+}
+
+function updateOptCount() {
+  const v = document.getElementById('opt-after')?.value || '';
+  const el = document.getElementById('opt-count');
+  if (el) {
+    const len = v.length;
+    el.textContent = `${len} / 280`;
+    el.style.color = len > 280 ? '#ff4d6d' : len > 250 ? 'var(--lime)' : 'var(--t2)';
+  }
+}
+
+function cpOptimized() {
+  const t = document.getElementById('opt-after')?.value;
+  if (!t) return;
+  navigator.clipboard.writeText(t).then(() => {
+    const btn = document.getElementById('opt-cpbtn');
+    btn.textContent = '✓ コピー済み'; btn.classList.add('done');
+    setTimeout(() => { btn.textContent = '📋 コピー'; btn.classList.remove('done'); }, 2200);
+    toast('コピーしました', 'cp');
+  });
+}
+
+function saveOptimized() {
+  const text = document.getElementById('opt-after')?.value;
+  if (!text) return;
+  const entry = {
+    id: Date.now(), type: 'single',
+    title: text.substring(0, 40) + '…（AI最適化済み）',
+    plats: ['x'], posts: { x: text },
+    date: new Date().toLocaleString('ja-JP', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}),
+  };
+  saved.unshift(entry);
+  if (saved.length > 50) saved = saved.slice(0, 50);
+  localStorage.setItem(DBKEY, JSON.stringify(saved));
+  updateHcnt(); renderHistory();
+  toast('保存しました 💾');
+}
+
+// ══════════════════════════════════════
+//  X STATS
+// ══════════════════════════════════════
+async function doXStats() {
+  const ld  = document.getElementById('xst-ld');
+  const err = document.getElementById('xst-err');
+  const out = document.getElementById('xst-out');
+  ld.classList.add('on'); err.style.display='none'; out.style.display='none';
+
+  try {
+    const res = await fetch('/api/x?type=my_stats&max=10');
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || 'API接続エラー');
+    apiDot(true);
+
+    const u = data.user; const posts = data.posts || [];
+    document.getElementById('xst-profile').innerHTML = `
+      <div class="card" style="margin:0">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--s4);display:grid;place-items:center;font-family:var(--fh);font-size:16px;font-weight:800;color:var(--lime);flex-shrink:0">${(u?.name||'?')[0]}</div>
+          <div style="flex:1">
+            <div style="font-family:var(--fh);font-size:14px;font-weight:800;color:#fff">${u?.name||'—'}</div>
+            <div style="font-family:var(--fm);font-size:10px;color:var(--t1)">@${u?.username||'—'}</div>
+          </div>
+          <div style="display:flex;gap:16px">
+            <div style="text-align:center"><div style="font-family:var(--fh);font-size:20px;font-weight:800;color:#fff">${(u?.public_metrics?.followers_count||0).toLocaleString()}</div><div style="font-family:var(--fm);font-size:9px;color:var(--t2)">フォロワー</div></div>
+            <div style="text-align:center"><div style="font-family:var(--fh);font-size:20px;font-weight:800;color:#fff">${(u?.public_metrics?.tweet_count||0).toLocaleString()}</div><div style="font-family:var(--fm);font-size:9px;color:var(--t2)">投稿数</div></div>
+          </div>
+        </div>
+      </div>`;
+
+    const avgImp  = posts.length ? Math.round(posts.reduce((s,p)=>s+(p.impressions||0),0)/posts.length) : 0;
+    const avgLike = posts.length ? (posts.reduce((s,p)=>s+(p.likes||0),0)/posts.length).toFixed(1) : '0';
+    const avgER   = posts.length ? (posts.reduce((s,p)=>s+parseFloat(p.er||0),0)/posts.length).toFixed(2) : '0';
+    const topLike = posts.reduce((a,b)=>(b.likes||0)>(a.likes||0)?b:a, {likes:0});
+
+    document.getElementById('xst-kpi').innerHTML = [
+      ['平均インプレッション', avgImp.toLocaleString(), `直近${posts.length}投稿`],
+      ['平均いいね', avgLike, `直近${posts.length}投稿`],
+      ['平均ER', `${avgER}%`, 'エンゲージメント率'],
+      ['最高いいね', (topLike.likes||0).toLocaleString(), '❤️'],
+    ].map(([l,v,s])=>`<div style="background:var(--s3);border-radius:var(--rr2);padding:12px 14px"><div style="font-family:var(--fm);font-size:9px;color:var(--t2);text-transform:uppercase;margin-bottom:5px">${l}</div><div style="font-family:var(--fh);font-size:22px;font-weight:800;color:#fff">${v}</div><div style="font-family:var(--fm);font-size:10px;color:var(--lime)">${s}</div></div>`).join('');
+
+    document.getElementById('xst-posts').innerHTML = posts.map((p,i)=>`
+      <div style="background:var(--s3);border:1px solid var(--b0);border-radius:var(--rr2);padding:11px 13px;animation:fin .18s ease both;animation-delay:${i*.04}s">
+        <div style="font-size:12px;color:var(--tx);line-height:1.75;margin-bottom:7px">${p.text.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <span style="font-family:var(--fm);font-size:10px;color:var(--t1)">👁 <span style="color:var(--tx)">${(p.impressions||0).toLocaleString()}</span></span>
+          <span style="font-family:var(--fm);font-size:10px;color:var(--t1)">❤️ <span style="color:var(--tx)">${(p.likes||0).toLocaleString()}</span></span>
+          <span style="font-family:var(--fm);font-size:10px;color:var(--t1)">🔄 <span style="color:var(--tx)">${(p.retweets||0).toLocaleString()}</span></span>
+          <span style="font-family:var(--fm);font-size:10px;color:var(--t1)">💬 <span style="color:var(--tx)">${(p.replies||0).toLocaleString()}</span></span>
+          <span style="font-family:var(--fm);font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(61,255,176,.1);color:var(--lime);margin-left:auto">ER ${p.er}%</span>
+        </div>
+        <div style="margin-top:6px">
+          <button style="display:flex;align-items:center;gap:3px;padding:3px 8px;border-radius:5px;background:var(--s2);border:1px solid var(--b0);font-family:var(--fh);font-size:10px;font-weight:700;color:var(--t1);cursor:pointer" onclick="sendToOptimize(${JSON.stringify(p.text)})">✨ AI最適化に送る</button>
+        </div>
+      </div>`).join('');
+
+    out.style.display='block';
+    toast('分析完了 ✓');
+  } catch(e) {
+    err.textContent = e.message;
+    err.style.display='block';
+    apiDot(false);
+  }
+  ld.classList.remove('on');
+}
+</script>
+</body>
+</html>
